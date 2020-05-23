@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <!-- Slider main container -->
+        <div class="swiper-container main-carousel">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                <div class="swiper-slide home_banner">
+                    <img class="image-cover" src="https://i.picsum.photos/id/590/1920/600.jpg" alt="">
+                </div>
+                <div class="swiper-slide home_banner">
+                    <img class="image-cover" src="https://i.picsum.photos/id/290/1920/600.jpg" alt="">
+                </div>
+                <div class="swiper-slide home_banner">
+                    <img class="image-cover" src="https://i.picsum.photos/id/190/1920/600.jpg" alt="">
+                </div>
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

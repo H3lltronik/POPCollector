@@ -1,0 +1,46 @@
+html, body {
+    overflow-x: hidden;
+}
+
+@mixin font-poppins-medium ($size, $minSize, $color) {
+    @include poppins-medium;
+    @include text-responsive($size, $minSize);
+    color: $color !important;
+}
+
+@mixin font-poppins-regular ($size, $minSize, $color) {
+    @include poppins-regular;
+    @include text-responsive($size, $minSize);
+    color: $color !important;
+}
+
+@mixin font-poppins-italic ($size, $minSize, $color) {
+    @include poppins-italic;
+    @include text-responsive($size, $minSize);
+    color: $color !important;
+}
+
+@mixin font-poppins-bold ($size, $minSize, $color) {
+    @include poppins-bold;
+    @include text-responsive($size, $minSize);
+    color: $color !important;
+}
+
+@mixin font-poppins-black ($size, $minSize, $color) {
+    @include poppins-black;
+    @include text-responsive($size, $minSize);
+    color: $color !important;
+}
+
+@mixin font-poppins-light ($size, $minSize, $color) {
+    @include poppins-light;
+    @include text-responsive($size, $minSize);
+    color: $color !important;
+}
+
+.normal-button {
+    button {
+        outline: none !important;
+    }
+    outline: none !important;
+}
