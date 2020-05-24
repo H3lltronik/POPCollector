@@ -15,7 +15,7 @@
         <div id="app">
             <el-container>
                 <el-header class="px-0 mx-0" style="height: auto;">
-                <toolbar-component user="{{ (app.user)? app.user|serialize : null}}"></toolbar-component>
+                    {{render_toolbar(app.user)}}
                 </el-header>
                 <el-main>
                     <div class="container">

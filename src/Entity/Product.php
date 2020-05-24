@@ -30,11 +30,6 @@ class Product
     private $distribuitor;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $barcode;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $stock;
@@ -74,6 +69,34 @@ class Product
      */
     private $sales;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ProductType::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $productType;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $images = [];
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ProductFormat::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $format;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ProductEdition::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $edition;
+
     public function __construct()
     {
         $this->sales = new ArrayCollection();
@@ -104,18 +127,6 @@ class Product
     public function setDistribuitor(?string $distribuitor): self
     {
         $this->distribuitor = $distribuitor;
-
-        return $this;
-    }
-
-    public function getBarcode(): ?string
-    {
-        return $this->barcode;
-    }
-
-    public function setBarcode(string $barcode): self
-    {
-        $this->barcode = $barcode;
 
         return $this;
     }
@@ -231,6 +242,66 @@ class Product
                 $sale->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getProductType(): ?ProductType
+    {
+        return $this->productType;
+    }
+
+    public function setProductType(?ProductType $productType): self
+    {
+        $this->productType = $productType;
+
+        return $this;
+    }
+
+    public function getImages(): ?array
+    {
+        return $this->images;
+    }
+
+    public function setImages(?array $images): self
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    public function getFormat(): ?ProductFormat
+    {
+        return $this->format;
+    }
+
+    public function setFormat(?ProductFormat $format): self
+    {
+        $this->format = $format;
+
+        return $this;
+    }
+
+    public function getEdition(): ?ProductEdition
+    {
+        return $this->edition;
+    }
+
+    public function setEdition(?ProductEdition $edition): self
+    {
+        $this->edition = $edition;
 
         return $this;
     }

@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductTypeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Product;
+use App\Entity\ProductFormat;
+use App\Entity\ProductEdition;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
+use App\Repository\ProductTypeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ProductTypeRepository::class)
@@ -25,19 +29,28 @@ class ProductType
     private $Name;
 
     /**
+     * @Exclude
      * @ORM\ManyToMany(targetEntity=ProductFormat::class, mappedBy="ProductType")
      */
     private $productFormats;
 
     /**
+     * @Exclude
      * @ORM\ManyToMany(targetEntity=ProductEdition::class, mappedBy="productType")
      */
     private $productEditions;
+
+    /**
+     * @Exclude
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="productType")
+     */
+    private $products;
 
     public function __construct()
     {
         $this->productFormats = new ArrayCollection();
         $this->productEditions = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +121,37 @@ class ProductType
         if ($this->productEditions->contains($productEdition)) {
             $this->productEditions->removeElement($productEdition);
             $productEdition->removeProductType($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setProductType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getProductType() === $this) {
+                $product->setProductType(null);
+            }
         }
 
         return $this;

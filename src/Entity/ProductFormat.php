@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductFormatRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
+use App\Repository\ProductFormatRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ProductFormatRepository::class)
@@ -25,13 +26,20 @@ class ProductFormat
     private $Name;
 
     /**
+     * @Exclude
      * @ORM\ManyToMany(targetEntity=ProductType::class, inversedBy="productFormats")
      */
     private $ProductType;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="format")
+     */
+    private $products;
+
     public function __construct()
     {
         $this->ProductType = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,6 +80,37 @@ class ProductFormat
     {
         if ($this->ProductType->contains($productType)) {
             $this->ProductType->removeElement($productType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setFormat($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getFormat() === $this) {
+                $product->setFormat(null);
+            }
         }
 
         return $this;

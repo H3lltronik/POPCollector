@@ -18,29 +18,32 @@
         <label for="inputPassword">Confirmar contraseña</label>
         <input type="password" name="password2" id="inputPassword2" class="form-control" required>
 
+        <div><label >Tipo de cuenta</label></div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="accountType" value="buyer">Comprador
+            </label>
+            </div>
+            <div class="form-check">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="accountType" value="seller">Vendedor
+            </label>
+        </div>
+
         <input type="hidden" name="_csrf_token"
             value="{{ csrf_token('authenticate') }}"
         >
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
-        #}
-
-        <button id="crearCuenta" class="btn btn-sm btn-primary" type="submit">
-            Crear cuenta
-        </button>
-        <a href="{{ path('app_login') }}">
-            <button class="btn btn-sm btn-info" type="button">
-                Iniciar sesion
+        <div class="d-flex mt-lg-4">
+            <button id="crearCuenta" class="btn btn-sm btn-primary" type="submit">
+                Crear cuenta
             </button>
-        </a>
+            <a href="{{ path('app_login') }}">
+                <button class="btn btn-sm btn-info" type="button">
+                    Iniciar sesion
+                </button>
+            </a>
+        </div>
     </el-form>
 {% endblock %}
 
@@ -54,7 +57,6 @@
                 }
             },
             created () {
-                alert("ola")
             },
             methods: {
                 setLoading (status) {
@@ -68,12 +70,13 @@
 
                 let email = $("#inputEmail").val();
                 let password = $("#inputPassword").val();
+                let accountType = $("input:radio[name ='accountType']:checked").val();
 
                 console.log($("#inputPassword").val(), $("#inputPassword2").val(), $("#inputPassword").val() === $("#inputPassword2").val())
                 if (password  === $("#inputPassword2").val() ) {
                     console.log("Ira nomas voy a crear un usuario")
                     vueInst.setLoading(true)
-                    $.post("{{ path('app_user_save') }}", {email, password})
+                    $.post("{{ path('app_user_save') }}", {email, password, accountType})
                     .done(() => {
                         vueInst.setLoading(false)
                         vueInst.$notify({

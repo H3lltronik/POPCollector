@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Services\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,21 +48,16 @@ class SecurityController extends AbstractController
      * @param UserPasswordEncoderInterface $encoder
      * @return JsonResponse
      */
-    public function save( Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder) {
-		// $this->security->denyUnlessHasRole("ROLE_USERS_WRITE");
+    public function save( Request $request, UserService $userService) {
+        // $this->security->denyUnlessHasRole("ROLE_USERS_WRITE");
+        $values = [
+            "email" => $request->request->get("email"),
+            "password" => $request->request->get("password"),
+            "accountType" => $request->request->get("accountType"),
+        ];
+        $userService->createUser($values);
 
-        $user = new User();
-        $em->persist($user);
-
-        $user->setEmail($request->request->get('email'));
-        $password = $request->request->get('password');
-        if ($password) {
-            $user->setPassword($encoder->encodePassword($user, $password));
-        }
-
-        $em->flush();
-
-        // $this->addFlash('newAccount', 'Favor de iniciar sesion con tu nueva cuenta');
+        $this->addFlash('newAccount', 'Favor de iniciar sesion con tu nueva cuenta');
         return JsonResponse::create(['status' => 'ok']);
     }
 }

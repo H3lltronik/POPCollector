@@ -59,3 +59,41 @@ body {
 		}
 	}
 }
+
+.categories {
+	&_image-container {
+		width: 100%;
+		height: 500px;
+	}
+
+	&_title {
+		text-align: center;
+		@include font-poppins-medium(21pt, 14pt, black);
+	}
+}
+
+.product {
+	&_page-title {
+		@include font-poppins-medium(35pt, 19pt, black);
+		text-transform: uppercase;
+		text-align: center;
+	}
+	&_small {
+		&_container {
+
+		}
+
+		&_image {
+			width: 100%;
+			height: 300px;
+		}
+
+		&_title {
+			@include font-poppins-medium(16pt, 9pt, black);
+		}
+
+		&_price {
+			@include font-poppins-medium(14pt, 8pt, gray);
+		}
+	}
+}

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+    {% for category in categories %}
+        <div class="col-12 col-lg-4 mb-lg-4">
+            <el-link :underline="false" href="{{path('product_create', { idType: category.id })}}">
+                <div class="d-flex flex-column">
+                    <div class="categories_image-container">
+                        <img class="image-cover" src="https://images-na.ssl-images-amazon.com/images/I/71SVE2mEfvL._AC_SL1001_.jpg" alt="">
+                    </div>
+                    <div class="categories_title mt-lg-2">{{category.name}}</div>
+                </div>
+            </el-link>
+        </div>
+    {% endfor %}
+        
+        {# <div class="col-12 col-lg-4 mb-lg-4">
+            <el-link :underline="false">
+                <div class="d-flex flex-column">
+                        <div class="categories_image-container">
+                    <img class="image-cover" src="https://images-na.ssl-images-amazon.com/images/I/71SVE2mEfvL._AC_SL1001_.jpg" alt="">
+                </div>
+                <div class="categories_title mt-lg-2">Peliculas</div>
+                </div>
+            </el-link>
+        </div>
+        <div class="col-12 col-lg-4 mb-lg-4">
+            <el-link :underline="false">
+                <div class="d-flex flex-column">
+                        <div class="categories_image-container">
+                    <img class="image-cover" src="https://images-na.ssl-images-amazon.com/images/I/71SVE2mEfvL._AC_SL1001_.jpg" alt="">
+                </div>
+                <div class="categories_title mt-lg-2">Peliculas</div>
+                </div>
+            </el-link>
+        </div>
+        <div class="col-12 col-lg-4 mb-lg-4">
+            <el-link :underline="false">
+                <div class="d-flex flex-column">
+                        <div class="categories_image-container">
+                    <img class="image-cover" src="https://images-na.ssl-images-amazon.com/images/I/71SVE2mEfvL._AC_SL1001_.jpg" alt="">
+                </div>
+                <div class="categories_title mt-lg-2">Peliculas</div>
+                </div>
+            </el-link>
+        </div>
+        <div class="col-12 col-lg-4 mb-lg-4">
+            <el-link :underline="false">
+                <div class="d-flex flex-column">
+                        <div class="categories_image-container">
+                    <img class="image-cover" src="https://images-na.ssl-images-amazon.com/images/I/71SVE2mEfvL._AC_SL1001_.jpg" alt="">
+                </div>
+                <div class="categories_title mt-lg-2">Peliculas</div>
+                </div>
+            </el-link>
+        </div> #}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
