@@ -8,8 +8,9 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import '../css/app.scss';
 import 'element-ui/lib/theme-chalk/index.css'
+import $ from "jquery";
+window.$ = $;
+import './productPage'
 import './homePage'
 import "./components"
-import $ from "jquery";
 
-window.$ = $;

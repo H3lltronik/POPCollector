@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+<div class="row">
+    {% if busqueda != null %}
+        <div class="col-12 col-lg-5">
+            <!-- Slider main container -->
+            <div class="swiper-container main-carousel h-100">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    {% for image in busqueda.images %}
+                        <div class="swiper-slide product_page_image">
+                            <img class="image-cover" src="{{ asset("uploads/busquedas/" ~ image.name) }}" alt="">
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-7">
+            <div class="product_page_title">{{busqueda.title}} <small class="product_page_small text-muted">(Creado {{busqueda.createdAt|date("Y-m-d")}})</small></div>
+            <div class="product_page_description mt-lg-4">{{busqueda.description}}</div>
+
+            {% if app.user.id|default(null) == busqueda.publisherId %}
+                <div class="row justify-content-around mt-lg-3">
+                    <div class="col-6 col-lg-3">
+                        <form method="GET" action="{{path('product_create')}}">
+                            <input hidden type="text" id="productID" name="productID" value="{{busqueda.id}}">
+                            <div class="col-5"><button type="submit" class="btn btn-primary mb-2">Cerrar busqueda</button></div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
+
+        {% if app.user.id|default(null) != busqueda.publisherId and app.user.id|default(null) != null %}
+                <div class="col-12 mt-lg-4">
+                    <div class="row justify-content-center mt-lg-3">
+                            <recommend-form-component productsprops="{{products|serialize}}" addrecommend="{{path("se_busca_recommendation_save")}}" sebuscaid="{{busqueda.id}}"></recommend-form-component>
+                    </div>
+                </div>
+        {% endif %}
+        <div class="col-12 mt-lg-5">
+            <div class="row">
+            <hr>
+                <div class="col-12 ">
+                    <div class="row">
+                        <div class="mx-auto product_page_title">Recomendaciones</div>
+                    </div>
+                </div>
+                {% for product in busqueda.recommendations %}
+                    <div class="col-6 col-lg-4 product_small_container mt-lg-3">
+                        <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
+                            <div class="d-flex flex-column">
+                                <div class="product_small_image">
+                                    <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
+                                </div>
+
+                                <div class="product_small_title mt-lg-2">{{product.title}}</div>
+                                <div class="product_small_price">${{product.price}}</div>
+                            </div>
+                        </el-link>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% else %}
+        <h1>Esta busqueda no existe o fue desabilitado :c</h1>
+    {% endif %}
+    
+    
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

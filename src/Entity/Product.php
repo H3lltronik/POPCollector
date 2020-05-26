@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use JMS\Serializer\Annotation\Exclude;
+use Doctrine\Common\Collections\Collection;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -86,20 +89,59 @@ class Product
     private $images = [];
 
     /**
+     * @Exclude
      * @ORM\ManyToOne(targetEntity=ProductFormat::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
     private $format;
 
     /**
+     * @Exclude
      * @ORM\ManyToOne(targetEntity=ProductEdition::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
     private $edition;
 
+    /**
+     * @Exclude
+     * @ORM\ManyToOne(targetEntity=WishList::class, inversedBy="products")
+     */
+    private $wishList;
+
+    /**
+     * @Exclude
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $publisher;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default" : 0})
+     */
+    private $isVisible;
+
+    /**
+     * @Exclude
+     * @ORM\ManyToMany(targetEntity=WishList::class, mappedBy="products")
+     */
+    private $wishLists;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default": 0})
+     */
+    private $clicks;
+
+    /**
+     * @Exclude
+     * @ORM\ManyToMany(targetEntity=SeBusca::class, mappedBy="recommendations")
+     */
+    private $seBuscas;
+
     public function __construct()
     {
         $this->sales = new ArrayCollection();
+        $this->wishLists = new ArrayCollection();
+        $this->seBuscas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -302,6 +344,134 @@ class Product
     public function setEdition(?ProductEdition $edition): self
     {
         $this->edition = $edition;
+
+        return $this;
+    }
+
+    public function getWishList(): ?WishList
+    {
+        return $this->wishList;
+    }
+
+    public function setWishList(?WishList $wishList): self
+    {
+        $this->wishList = $wishList;
+
+        return $this;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("priceText")
+     */
+    public function getPriceText() {
+        return "$".$this->getPrice();
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("format")
+     */
+    public function getFormatID() {
+        return $this->getFormat()->getId();
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("edition")
+     */
+    public function getEditiontID() {
+        return $this->getEdition()->getId();
+    }
+
+    public function getPublisher(): ?User
+    {
+        return $this->publisher;
+    }
+
+    public function setPublisher(?User $publisher): self
+    {
+        $this->publisher = $publisher;
+
+        return $this;
+    }
+
+    public function getIsVisible(): ?bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): self
+    {
+        $this->isVisible = $isVisible;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WishList[]
+     */
+    public function getWishLists(): Collection
+    {
+        return $this->wishLists;
+    }
+
+    public function addWishList(WishList $wishList): self
+    {
+        if (!$this->wishLists->contains($wishList)) {
+            $this->wishLists[] = $wishList;
+            $wishList->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWishList(WishList $wishList): self
+    {
+        if ($this->wishLists->contains($wishList)) {
+            $this->wishLists->removeElement($wishList);
+            $wishList->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function getClicks(): ?int
+    {
+        return $this->clicks;
+    }
+
+    public function setClicks(?int $clicks): self
+    {
+        $this->clicks = $clicks;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SeBusca[]
+     */
+    public function getSeBuscas(): Collection
+    {
+        return $this->seBuscas;
+    }
+
+    public function addSeBusca(SeBusca $seBusca): self
+    {
+        if (!$this->seBuscas->contains($seBusca)) {
+            $this->seBuscas[] = $seBusca;
+            $seBusca->addRecommendation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeBusca(SeBusca $seBusca): self
+    {
+        if ($this->seBuscas->contains($seBusca)) {
+            $this->seBuscas->removeElement($seBusca);
+            $seBusca->removeRecommendation($this);
+        }
 
         return $this;
     }

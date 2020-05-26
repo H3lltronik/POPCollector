@@ -33,8 +33,7 @@ class Personalization
     private $mother_last_name;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="personalization", cascade={"persist", "remove"})
      */
     private $user;
 
@@ -84,7 +83,7 @@ class Personalization
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

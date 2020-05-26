@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/", name="home")
@@ -31,5 +32,10 @@ class HomeController extends AbstractController {
     public function test() {
         $this->addFlash('newAccount', 'Favor de iniciar sesion con tu nueva cuenta');
         return $this->forward("App\Controller\SecurityController::login");
+    }
+
+    public function onKernelController(ControllerEvent $event) {
+        
+        $event->setController($myCustomController);
     }
 }

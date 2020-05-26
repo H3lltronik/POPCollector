@@ -1,10 +1,10 @@
 <template>
     <el-form ref="form" :model="form" :loading="loading">
-        {{form.genres}}
+        <!-- {{form.format}} -->
         <div class="row">
             <div class="col-12 col-lg-6">
                 <el-form-item :label="namelabel">
-                    <el-input v-model="form.name" :placeholder="namelabel"></el-input>
+                    <el-input v-model="form.title" :placeholder="namelabel"></el-input>
                 </el-form-item>
             </div>
             <div class="col-12 col-lg-6">
@@ -36,7 +36,7 @@
             </div>
             <div class="col-12 col-lg-6">
                 <el-form-item label="Genero">
-                    <el-checkbox-group v-model="form.genres">
+                    <el-checkbox-group v-model="form.genero">
                         <el-checkbox :label="genre" :name="genre" v-for="(genre, index) in genres" :key="index"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -55,7 +55,7 @@
             </div>
         </div>
         <el-form-item label="Descripcion">
-            <el-input type="textarea" v-model="form.description" placeholder="Descripcion"></el-input>
+            <el-input type="textarea" v-model="form.description" placeholder="Descripcion" :rows="6"></el-input>
         </el-form-item>
 
         <el-form-item label="Imagenes">
@@ -66,7 +66,7 @@
         </el-upload>
 
         <el-form-item class="mt-lg-3">
-            <el-button type="primary" @click="uploadImages">Create</el-button>
+            <el-button type="primary" @click="uploadImages">{{ (entityprop)? "Edit":"Create" }}</el-button>
             <el-button>Cancel</el-button>
         </el-form-item>
     </el-form>
@@ -106,13 +106,16 @@ export default {
         },
         productID: {
             default: null
+        },
+        entityprop: {
+            default: null
         }
     },
     data () {
         return {
             loading: false,
             form: {
-                genres: []
+                genero: []
             },
             genres: [],
             formats: [],
@@ -126,6 +129,9 @@ export default {
         this.formats = JSON.parse(this.formatsprop);
         this.editions = JSON.parse(this.editionsprop);
         this.productType = JSON.parse(this.producttypeprop);
+        if (this.entityprop) {
+            this.form = JSON.parse(this.entityprop);
+        }
     },
     methods: {
       handleRemove(file, fileList) {
@@ -153,21 +159,21 @@ export default {
           this.$refs[formName].validate((valid) => {
             if (valid) {
                 let formData = new FormData ();
-                formData.append("name", this.form.name);
+                formData.append("name", this.form.title);
                 formData.append("author", this.form.author);
                 formData.append("year", this.form.year);
                 formData.append("distribuitor", this.form.distribuitor);
                 formData.append("format", this.form.format);
                 formData.append("stock", this.form.stock);
-                formData.append("genres", JSON.stringify(this.form.genres));
+                formData.append("genres", JSON.stringify(this.form.genero));
                 formData.append("edition", this.form.edition);
                 formData.append("price", this.form.price);
                 formData.append("description", this.form.description);
                 formData.append("productType", this.productType.id);
                 formData.append("images", JSON.stringify(this.files));
 
-                if (this.productID !== null && this.productID !== undefined)
-                    formData.append("productID", this.productID);
+                if (this.entityprop)
+                    formData.append("productID", this.form.id);
 
                 axios.post(this.submit, formData).then(res => {
                     console.log("Resposse", res)

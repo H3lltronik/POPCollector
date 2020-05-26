@@ -77,11 +77,14 @@ class ProductController extends AbstractController {
         } 
 
         $productType = $em->getRepository(ProductType::class)->findOneBy(["id" => $productTypeID]);
+        $entity = $em->getRepository(Product::class)->findOneBy(["id" => $productID]);
+
+        $params["entity"] = $entity;
+
         $params["formats"] = $productType->getProductFormats();
         $params["editions"] = $productType->getProductEditions();
         $params["productID"] = $productID;
-
-        dump($params["editions"]);
+        
 
         return $this->render('product/form.html.twig', $params);
     }
@@ -94,6 +97,26 @@ class ProductController extends AbstractController {
 
         return $this->render('product/bridge.html.twig', [
             "categories" => $categories
+        ]);
+    }
+
+    /**
+     * @Route("/id/{id}", name="_details")
+     */
+    public function product(int $id = 0, EntityManagerInterface $em, ProductService $productService) {
+        $product = $em->getRepository(Product::class)->findOneBy(["id" => $id]);
+        $visible = $product->getIsVisible();
+
+        $product->setClicks($product->getClicks() + 1);
+        $em->persist($product);
+        $em->flush();
+
+        $relatedProducts = $productService->getRelatedProducts 
+            ($product->getProductType()->getName(), 6, $product->getId());
+
+        return $this->render('product/index.html.twig', [
+            "product" => $visible? $product : null,
+            "related" => $relatedProducts,
         ]);
     }
 
@@ -128,6 +151,16 @@ class ProductController extends AbstractController {
     }
 
     /**
+     * @Route("/wishlist", name="_wishlist", methods={"GET"})
+     */
+    public function wishlist (Request $request, ProductService $productService, EntityManagerInterface $em) {
+        $productID = $request->query->get('idProduct', 1);
+        $productService->addProductToWishlist($productID);
+        
+        return JsonResponse::create(["status" => "ok"]);
+    }
+
+    /**
      * @Route("/save", name="_save", methods={"POST"})
      */
     public function save(Request $request, ProductService $productService) {
@@ -147,8 +180,6 @@ class ProductController extends AbstractController {
         $values['productType'] = $request->request->get('productType', null);
         $values['productFormat'] = $request->request->get('format', null);
         $values['productEdition'] = $request->request->get('edition', null);
-
-        dump($values);
 
         if (isset($productID)) {
             $productService->editProduct($productID, $values);
@@ -177,5 +208,12 @@ class ProductController extends AbstractController {
             "folder" => $uName,
             "filename" => $filename,
             ]);
+    }
+
+    /**
+     * @Route("/product/check-clicks", name="_check-clicks")
+     */
+    public function checkProductClicks() {
+        
     }
 }

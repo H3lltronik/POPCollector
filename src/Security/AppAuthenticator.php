@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Services\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class AppAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
@@ -31,12 +33,14 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, UserService $userService, FlashBagInterface $flashBag)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->userService = $userService;
+        $this->flashBag = $flashBag;
     }
 
     public function supports(Request $request)
@@ -73,13 +77,20 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
+        if (!$user->getIsActive()) {
+            throw new CustomUserMessageAuthenticationException('Esta cuenta no existe o ha sido suspendida');
+        }
 
         return $user;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        $res = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        if ($res) {
+            $this->userService->setLastLogin($user);
+        }
+        return $res;
     }
 
     /**
@@ -92,6 +103,8 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        $this->flashBag->add('personalizationMissing', 'Favor de llenar la personalizacion');
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }

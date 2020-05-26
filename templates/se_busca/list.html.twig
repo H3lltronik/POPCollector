@@ -5,17 +5,16 @@
 {% block body %}
     <div class="product_page-title mb-lg-3">{{category|default("Todo")}}</div>
     <div class="row">
-        {% for product in products %}
-            {% if product.isVisible %}
+        {% for busqueda in busquedas %}
+            {% if busqueda.isVisible %}
                 <div class="col-12 col-lg-3">
-                    <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
+                    <el-link :underline="false" href="{{ path("se_busca_details", {id: busqueda.id}) }}">
                         <div class="d-flex flex-column">
                             <div class="product_small_image">
-                                <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
+                                <img class="image-cover" src="{{asset('uploads/busquedas/'~ busqueda.images[0].name)}}" alt="">
                             </div>
 
-                            <div class="product_small_title mt-lg-2">{{product.title}}</div>
-                            <div class="product_small_price">${{product.price}}</div>
+                            <div class="product_small_title mt-lg-2">{{busqueda.title}}</div>
                         </div>
                     </el-link>
                 </div>

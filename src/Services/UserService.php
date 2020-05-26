@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use DateTime;
+use DateTimeZone;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -36,6 +38,8 @@ class UserService {
         $user->setRoles($roles ?? []);
 
         $this->em->flush();
+
+        return $user;
     }
 
     public function mainMenuOptByUser(?User $user) {
@@ -55,8 +59,12 @@ class UserService {
 
         if (in_array("ROLE_BUYER", $user->getRoles())) {
             array_push($opts, [
-                "href" => "/",
-                "text" => "Estadisticas",
+                "href" => "/user/wishlist",
+                "text" => "Wishlist",
+            ],
+            [
+                "href" => "/se-busca/create",
+                "text" => "Crear busqueda",
             ]);
         } else if (in_array("ROLE_SELLER", $user->getRoles())) {
             array_push($opts, [
@@ -70,5 +78,11 @@ class UserService {
         }
         return $opts;
         
+    }
+
+    public function setLastLogin (User $user) {
+        $user->setLastLogin(new DateTime("now", new DateTimeZone('America/Mexico_City') ));
+        $this->em->persist($user);
+        $this->em->flush();
     }
 }

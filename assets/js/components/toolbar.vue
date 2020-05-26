@@ -1,7 +1,7 @@
 <template>
     <div class="toolbar_container row mx-0 align-items-center">
         <div class="toolbar_logo h-100 mr-lg-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>
-        <form action="" method="GET" class="toolbar_search">
+        <form action="/product/all" method="GET" class="toolbar_search">
             <div class="row mx-0">
                 <el-input class="w-100" name="searchParam" :placeholder="searchPlaceholder" v-model="form.busqueda">
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -26,16 +26,24 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
-                <el-badge :value="3" class="item ml-lg-2">
-                    <el-button class="normal-button" icon="el-icon-shopping-cart-1" round></el-button>
+                <el-badge :value="cart.length" class="item ml-lg-2">
+                    <el-button class="normal-button" icon="el-icon-shopping-cart-1" round @click="toggleCart"></el-button>
                 </el-badge>
             </div>
         </div>
+
+        <cart-component :cart="cart"></cart-component>
     </div>
 </template>
 
 <script>
+import Cart from './cart'
+import { EventBus } from './eventBus.js';
+
 export default {
+    components: {
+        'cart-component': Cart,
+    },
     props: {
         user: {
             default: null
@@ -52,18 +60,26 @@ export default {
         currentcategory: {
             default: null
         },
+        cartprop: {
+            default: () => { return [ ]}
+        }
     },
     data () {
         return {
             form: {},
-            menuOpts: []
+            menuOpts: [],
+            cart: [],
         }
     },
     created () {
         this.menuOpts = JSON.parse(this.mainmenuopts)
+        this.cart = JSON.parse(this.cartprop)
         console.log("Menu", this.menuOpts)
     },
     methods: {
+        toggleCart () {
+            EventBus.$emit("toggle-cart");
+        }
     },
     computed: {
         searchPlaceholder () {

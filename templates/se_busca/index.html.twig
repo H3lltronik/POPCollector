@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <se-busca-form-component uploadendpoint="{{path("se_busca_image-upload")}}" submit="{{path("se_busca_save")}}"></se-busca-form-component>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

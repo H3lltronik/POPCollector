@@ -3,18 +3,145 @@
 {% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="row" id="prod">
+    {% if product != null %}
+        <div class="col-12 col-lg-5">
+            <!-- Slider main container -->
+            <div class="swiper-container main-carousel h-100">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    {% for image in product.images %}
+                        <div class="swiper-slide product_page_image">
+                            <img class="image-cover" src="{{ asset("uploads/products/" ~ image.name) }}" alt="">
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-7">
+            <div class="product_page_title">{{product.title}}</div>
+            <div class="product_page_distribuitor">- {{product.distribuitor}} <small class="text-muted">({{product.year}})</small></div>
+            <div class="product_page_author">- {{product.author}}</div>
+            <div class="product_page_year">- ${{product.price}} <small class="text-muted">({{product.stock}} disponibles)</small></div>
+            <div class="product_page_description mt-lg-4">{{product.description}}</div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null %}
+                <div class="row justify-content-around mt-lg-3">
+                    <div class="col-6 col-lg-3">
+                        <form action="{{path('cart_add')}}">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="row"><input id="quantity" name="quantity" type="number" class="form-control" placeholder="Cantidad"/></div>
+                                </div>
+                                <div class="col-5"><button id="submit" type="button" class="btn btn-primary mb-2">Comprar</button></div>
+                            </div>
+                            <input hidden type="text" id="idProduct" name="idProduct" value="{{product.id}}">
+                        </form>
+                    </div>
+                    <button id="wishlist" type="button" class="btn btn-primary mb-2">Añadir a Wishlist</button>
+                </div>
+            {% elseif app.user.id|default(null) == product.publisher.id %}
+                <div class="row justify-content-around mt-lg-3">
+                    <div class="col-6 col-lg-3">
+                        <form method="GET" action="{{path('product_create')}}">
+                            <input hidden type="text" id="productID" name="productID" value="{{product.id}}">
+                            <input hidden type="text" id="idType" name="idType" value="{{product.productType.id}}">
+                            <div class="col-5"><button type="submit" class="btn btn-primary mb-2">Editar</button></div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/Code/Symfony/Marco/POPCollector/src/Controller/ProductController.php'|file_link(0) }}">src/Controller/ProductController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/Code/Symfony/Marco/POPCollector/templates/product/index.html.twig'|file_link(0) }}">templates/product/index.html.twig</a></code></li>
-    </ul>
+        <div class="col-12 mt-lg-5 mb-lg-3">
+            <div class="row">
+                <span class="product_page_title">Relacionados</span>
+            </div>
+
+            <div class="row owl-carousel owl-carousel owl-theme">
+                {% for product in related %}
+                    <div class="product_small_container">
+                        <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
+                            <div class="d-flex flex-column">
+                                <div class="product_small_image">
+                                    <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
+                                </div>
+
+                                <div class="product_small_title mt-lg-2">{{product.title}}</div>
+                                <div class="product_small_price">${{product.price}}</div>
+                            </div>
+                        </el-link>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <h1>El producto no existe o fue desabilitado :c</h1>
+    {% endif %}
+    
+    
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let vueProd = new Vue({
+            el: "#prod",
+        })
+        $("#submit").click(e => {
+            let quantity = $("#quantity").val();
+            let idProduct = $("#idProduct").val();
+
+            // if (quantity > "{{product.stock}}") {
+            //     vueProd.$notify({
+            //         title: "Stock insuficiente",
+            //         type: "error",
+            //         message: "No hay tantos productos disponibles"
+            //     })
+            //     return;
+            // }
+
+            vueProd.$notify({
+                title: "Añadiendo producto",
+                type: "info",
+                message: "Por favor espere"
+            })
+
+            $("#submit").prop("disabled", true);
+            $.post("{{path('cart_add')}}", {quantity, idProduct}).then(res => {
+                $("#submit").prop("disabled", false);
+                vueProd.$notify({
+                    title: "Producto añadido",
+                    type: "success",
+                    message: "Por favor espere"
+                })
+                window.location.reload()
+            }).catch(err => {
+                vueProd.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: "Ocurrio un error"
+                })
+            })
+        });
+
+        $("#wishlist").click(e => {
+            $.get("{{path("product_wishlist", {idProduct: product.id})}}").then((res) => {
+                vueProd.$notify({
+                    title: "Añadido a wishlist",
+                    type: "success",
+                    message: "Todo correcto"
+                })
+            }).catch(err => {
+                vueProd.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: "Ocurrio un error"
+                })
+            })
+        })
+    </script>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% block body %}
     <div class="product_page-title mb-lg-3">{{category|default("Todo")}}</div>
     <div class="row">
-        {% for product in products %}
+        {% for product in app.user.wishlist.products %}
             {% if product.isVisible %}
                 <div class="col-12 col-lg-3">
                     <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
@@ -19,10 +19,9 @@
                         </div>
                     </el-link>
                 </div>
-                {% endif %}
+            {% endif %}
         {% endfor %}
     </div>
-    {{ knp_pagination_render(pagination) }}
 {% endblock %}
 
 {% block javascripts %}

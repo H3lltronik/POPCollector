@@ -3,7 +3,7 @@
         
         <toolbar-component 
         user="{{ (user)? app.user|serialize : null}}" mainmenuopts="{{mainMenuOpts|serialize}}" login="{{path("app_login")}}" logo="{{ asset('images/magiarecord_logo-chido.png') }}"
-        currentcategory="{{currentCategory|default(null)}}">
+        currentcategory="{{currentCategory|default(null)}}" cartprop="{{cart|serialize}}">
         </toolbar-component>
 
         <div class="toolbar_submenu_container mx-0">
@@ -12,7 +12,7 @@
                 {% for category in categories %}
                     <a href="{{path('product_all', {category: category.name})}} "><li>{{category.name}}</li></a>
                 {% endfor %}
-                <a href=""><li>Se busca</li></a>
+                <a href="{{path('se_busca_list')}}"><li>Se busca</li></a>
                 <a href=""><li>Contacto</li></a>
             </ul>
         </div>

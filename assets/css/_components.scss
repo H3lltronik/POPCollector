@@ -80,7 +80,7 @@ body {
 	}
 	&_small {
 		&_container {
-
+			width: 250px;
 		}
 
 		&_image {
@@ -94,6 +94,31 @@ body {
 
 		&_price {
 			@include font-poppins-medium(14pt, 8pt, gray);
+		}
+	}
+
+	&_page {
+		&_image {
+			// height: 500px;
+		}
+		&_title {
+			@include font-poppins-bold(40pt, 25pt, black);
+		}
+		&_small {
+			@include font-poppins-light(16pt, 9pt, gray);
+		}
+		&_distribuitor {
+			@include font-poppins-medium(25pt, 19pt, black);
+		}
+		&_author {
+			@include font-poppins-medium(25pt, 19pt, black);
+		}
+		&_year {
+			@include font-poppins-medium(20pt, 15pt, black);
+		}
+		&_description {
+			@include font-poppins-regular(16pt, 10pt, black);
+			text-align: justify;
 		}
 	}
 }

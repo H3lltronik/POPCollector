@@ -5,6 +5,7 @@ namespace App\Twig;
 use Twig\Environment;
 use Twig\TwigFunction;
 use App\Entity\ProductType;
+use App\Services\CartService;
 use App\Services\UserService;
 use Twig\Extension\AbstractExtension;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,11 +15,13 @@ class FrontExtension extends AbstractExtension {
     private $templating;
 
     public function __construct(Environment $templating, EntityManagerInterface $em,
-                                UserService $userService, RequestStack $requestStack) {
+                                UserService $userService, RequestStack $requestStack,
+                                CartService $cartService) {
         $this->templating = $templating;
         $this->em = $em;
         $this->userService = $userService;
         $this->requestStack = $requestStack;
+        $this->cartService = $cartService;
     }
 
     public function getFunctions(): array {
@@ -33,10 +36,14 @@ class FrontExtension extends AbstractExtension {
         $opts = $this->userService->mainMenuOptByUser($user) ?? [];
         $categories = $this->em->getRepository(ProductType::class)->findAll();
 
+        $cart = $this->cartService->getCartData ();
+        dump($currentCategory);
+
         $params = [
             "mainMenuOpts" => $opts,
             "user" => $user ?? null,
             "categories" => $categories,
+            "cart" => $cart,
             "currentCategory" => $currentCategory,
         ];
 
