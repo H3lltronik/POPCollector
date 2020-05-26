@@ -43,6 +43,11 @@ class ShippingAddress
      */
     private $state;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Personalization::class, inversedBy="shippingAddress", cascade={"persist", "remove"})
+     */
+    private $personalization;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class ShippingAddress
     public function setState(?State $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getPersonalization(): ?Personalization
+    {
+        return $this->personalization;
+    }
+
+    public function setPersonalization(?Personalization $personalization): self
+    {
+        $this->personalization = $personalization;
 
         return $this;
     }

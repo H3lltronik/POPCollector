@@ -5,6 +5,7 @@ namespace App\Twig;
 use Twig\Environment;
 use Twig\TwigFunction;
 use App\Entity\ProductType;
+use App\Entity\State;
 use App\Services\CartService;
 use App\Services\UserService;
 use Twig\Extension\AbstractExtension;
@@ -27,6 +28,7 @@ class FrontExtension extends AbstractExtension {
     public function getFunctions(): array {
         return [
             new TwigFunction('render_toolbar', [$this, 'renderToolbar'], ['is_safe' => ['html']]),
+            new TwigFunction('render_personalization', [$this, 'renderPersonalization'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -48,6 +50,30 @@ class FrontExtension extends AbstractExtension {
         ];
 
         return $this->templating->render('common/toolbar.html.twig', $params);
+    }
+
+    public function renderPersonalization($user) {
+        $states = $this->em->getRepository(State::class)->findAll();
+        $header = "";
+        if (isset($user)) {
+            $noPersonalization = ($user->getPersonalization() == null);
+
+            if (in_array("ROLE_BUYER", $user->getRoles())) {
+                $header = "Direccion de envio";
+            } else if (in_array("ROLE_SELLER", $user->getRoles())) {
+                $header = "Direccion de establecimiento";
+            }
+        }
+        else
+            $noPersonalization = false;
+
+        $params = [
+            "states" => $states,
+            "noPersonalization" => $noPersonalization,
+            "header" => $header,
+        ];
+
+        return $this->templating->render('common/personalization.html.twig', $params);
     }
 
 }

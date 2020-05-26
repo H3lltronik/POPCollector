@@ -35,6 +35,11 @@ class Ticket
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sales")
+     */
+    private $seller;
+
     public function __construct()
     {
         $this->sales = new ArrayCollection();
@@ -96,6 +101,18 @@ class Ticket
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSeller(): ?User
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?User $seller): self
+    {
+        $this->seller = $seller;
 
         return $this;
     }

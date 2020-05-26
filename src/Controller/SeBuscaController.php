@@ -50,6 +50,26 @@ class SeBuscaController extends AbstractController {
     }
 
     /**
+     * @Route("/list/own", name="_list_own")
+     */ 
+    public function listOwn( Request $request, PaginatorInterface $paginator) {
+        $user = $this->security->getUser();
+        $page = $request->query->get('page', 1);
+        $query = $this->em->getRepository(SeBusca::class)->createQueryBuilder("product");
+        $query->orderBy('product.created_at', 'ASC');
+        $query->andWhere('product.publisher = :val');
+        $query->setParameter("val", $user->getId());
+
+        $pagination = $paginator->paginate($query, $page, 16);
+
+        return $this->render('se_busca/list.html.twig', [
+            'pagination' => $pagination,
+            "category" => "Busquedas",
+            'busquedas' => $pagination->getItems(),
+        ]);
+    }
+
+    /**
      * @Route("/id/{id}", name="_details")
      */ 
     public function details(int $id = 0) {
@@ -57,7 +77,7 @@ class SeBuscaController extends AbstractController {
         $user = $this->security->getUser();
         $visible = $busqueda->getIsVisible();
 
-        dump($user->getProducts()->toArray());
+        dump($busqueda);
 
         return $this->render('se_busca/details.html.twig', [
             'busqueda' => $busqueda,
@@ -123,5 +143,27 @@ class SeBuscaController extends AbstractController {
         $this->em->flush();
 
         return JsonResponse::create(["status" => "ok"]);
+    }
+
+    /**
+     * @Route("/se-busca/cerrar", name="_close", methods={"POST"})
+     */ 
+    public function cerrar (Request $request) {
+        $seBuscaID = $request->request->get('sebuscaid', null);
+        $user = $this->security->getUser();
+        $seBusca = $this->em->getRepository(SeBusca::class)->findOneBy(["id" => $seBuscaID]);
+        dump($seBusca);
+        dump($seBuscaID);
+        
+        if ($user->getId() == $seBusca->getPublisherID()) {
+            $seBusca->setIsActive(false);
+            $this->em->persist($seBusca);
+            $this->em->flush();
+        } else {
+            return $this->json("NOT AUTHORIZED", 403);
+        }
+        return $this->forward('App\Controller\SeBuscaController::details', [
+            'id'  => $seBuscaID,
+        ]);
     }
 }

@@ -71,11 +71,17 @@ class User implements UserInterface
      */
     private $personalization;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="seller")
+     */
+    private $sales;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->seBuscas = new ArrayCollection();
+        $this->sales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -304,6 +310,37 @@ class User implements UserInterface
         $newUser = null === $personalization ? null : $this;
         if ($personalization->getUser() !== $newUser) {
             $personalization->setUser($newUser);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getSales(): Collection
+    {
+        return $this->sales;
+    }
+
+    public function addSale(Ticket $sale): self
+    {
+        if (!$this->sales->contains($sale)) {
+            $this->sales[] = $sale;
+            $sale->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSale(Ticket $sale): self
+    {
+        if ($this->sales->contains($sale)) {
+            $this->sales->removeElement($sale);
+            // set the owning side to null (unless already changed)
+            if ($sale->getSeller() === $this) {
+                $sale->setSeller(null);
+            }
         }
 
         return $this;

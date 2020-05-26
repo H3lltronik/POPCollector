@@ -48,7 +48,7 @@ class UserService {
             
         $opts = [
             "0" => [
-                "href" => "/",
+                "href" => "/account",
                 "text" => "Cuenta",
             ],
             "logout" => [
@@ -65,6 +65,10 @@ class UserService {
             [
                 "href" => "/se-busca/create",
                 "text" => "Crear busqueda",
+            ],
+            [
+                "href" => "/se-busca/list/own",
+                "text" => "Ver busquedas",
             ]);
         } else if (in_array("ROLE_SELLER", $user->getRoles())) {
             array_push($opts, [
@@ -74,6 +78,11 @@ class UserService {
             [
                 "href" => "/",
                 "text" => "Estadisticas",
+            ]);
+        } else if (in_array("ROLE_VERIFICATOR", $user->getRoles())) {
+            array_push($opts, [
+                "href" => "/product/create/categories",
+                "text" => "Verificaciones",
             ]);
         }
         return $opts;

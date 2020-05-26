@@ -8,7 +8,7 @@
 
         <div class="toolbar_submenu_container mx-0">
             <ul class="toolbar_submenu">
-                <a href=""><li>Inicio</li></a>
+                <a href="{{path('home')}}"><li>Inicio</li></a>
                 {% for category in categories %}
                     <a href="{{path('product_all', {category: category.name})}} "><li>{{category.name}}</li></a>
                 {% endfor %}

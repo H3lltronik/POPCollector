@@ -37,6 +37,11 @@ class Personalization
      */
     private $user;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ShippingAddress::class, mappedBy="personalization", cascade={"persist", "remove"})
+     */
+    private $shippingAddress;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,24 @@ class Personalization
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getShippingAddress(): ?ShippingAddress
+    {
+        return $this->shippingAddress;
+    }
+
+    public function setShippingAddress(?ShippingAddress $shippingAddress): self
+    {
+        $this->shippingAddress = $shippingAddress;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPersonalization = null === $shippingAddress ? null : $this;
+        if ($shippingAddress->getPersonalization() !== $newPersonalization) {
+            $shippingAddress->setPersonalization($newPersonalization);
+        }
 
         return $this;
     }

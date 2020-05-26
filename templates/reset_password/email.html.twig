@@ -1,0 +1,11 @@
+<h1>Hi!</h1>
+
+<p>
+    Para restaurar tu contraseña, porfavor visita
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">here</a>
+    Este link expira {{ tokenLifetime|date('g') }} hour(s)..
+</p>
+
+<p>
+    Cheers!
+</p>

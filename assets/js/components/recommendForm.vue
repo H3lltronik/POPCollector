@@ -1,14 +1,17 @@
 <template>
     <div>
         <el-form ref='form' :model='form'>
-            <div class='row'>
-                <div class='col-6'>
-                    <el-select v-model='recommended' placeholder='Select'>
+            <div class='row justify-content-center'>
+                <div class='col-auto'>
+                    <el-select :disabled="disabled" v-model='recommended' placeholder='Select' filterable>
                         <el-option v-for='product in products' :key='product.id' :label='product.title' :value='product.id'></el-option>
                     </el-select>
                 </div>
-                <div class='col-6'>
-                    <button id='submit' type='button' class='btn btn-primary mb-2' @click="recommendProduct">Recomendar producto</button>
+                <div class='col-auto'>
+                    <button :disabled="disabled" id='submit' type='button' class='btn btn-primary mb-2' @click="recommendProduct">Recomendar producto</button>
+                </div>
+                <div class='col-12 text-center' v-if="disabled">
+                    <div >El usuario ha cerrado la entrada de recomendaciones</div>
                 </div>
             </div>
         </el-form>
@@ -28,6 +31,9 @@ export default {
         },
         sebuscaid: {
             default: 0,
+        },
+        disabled: {
+            default: false
         }
     },
     data () {

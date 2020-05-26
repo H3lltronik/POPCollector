@@ -7,6 +7,7 @@
     {% if product != null %}
         <div class="col-12 col-lg-5">
             <!-- Slider main container -->
+            <div class="w-100 text-center">Publicado por: <a href="">{{product.publisher.personalization.name}}</a></div>
             <div class="swiper-container main-carousel h-100">
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
@@ -20,7 +21,7 @@
                 <div class="swiper-pagination"></div>
             </div>
         </div>
-        <div class="col-12 col-lg-7">
+        <div class="col-12 col-lg-7">   
             <div class="product_page_title">{{product.title}}</div>
             <div class="product_page_distribuitor">- {{product.distribuitor}} <small class="text-muted">({{product.year}})</small></div>
             <div class="product_page_author">- {{product.author}}</div>

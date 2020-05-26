@@ -41,6 +41,9 @@
         <button id="crearCuenta" class="btn btn-sm btn-info" type="button">
             Crear cuenta
         </button>
+        <button id="recuperarCuenta" class="btn btn-sm btn-info" type="button">
+            Recuperar contraseña
+        </button>
     </form>
 {% endblock %}
 
@@ -53,6 +56,11 @@
             let crearUrl = "{{ path('home_create_account') }}"
             $("#crearCuenta").click(() => {
                 location.href = crearUrl
+            })
+
+            let recuperaUrl = "{{ path('app_forgot_password_request') }}"
+            $("#recuperarCuenta").click(() => {
+                location.href = recuperaUrl
             })
         })
 

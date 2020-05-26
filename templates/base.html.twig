@@ -18,9 +18,7 @@
                     {{render_toolbar(app.user)}}
                 </el-header>
                 <el-main>
-                {% if app.flashes('personalizationMissing') %}
-                    <h1>CREA UNA PERSONALIZACINO PELODUTO</h1>
-                {% endif %}
+                    {{render_personalization (app.user)}}
                     <div class="container">
                         {% block body %}{% endblock %}
                     </div>

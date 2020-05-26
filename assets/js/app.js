@@ -13,4 +13,3 @@ window.$ = $;
 import './productPage'
 import './homePage'
 import "./components"
-
