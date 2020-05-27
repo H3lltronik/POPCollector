@@ -3,7 +3,6 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-{{products|serialize}}
     <div class="product_page-title mb-lg-3">{{category|default("Todo")}}</div>
     <div class="row">
         {% for product in products %}
