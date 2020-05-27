@@ -3,8 +3,10 @@
         
         <toolbar-component 
         user="{{ (user)? app.user|serialize : null}}" mainmenuopts="{{mainMenuOpts|serialize}}" login="{{path("app_login")}}" logo="{{ asset('images/magiarecord_logo-chido.png') }}"
-        currentcategory="{{currentCategory|default(null)}}" cartprop="{{cart|serialize}}">
+        currentcategory="{{currentcategory|default(null)}}" cartprop="{{cart|serialize}}">
         </toolbar-component>
+
+        <search-component></search-component>
 
         <div class="toolbar_submenu_container mx-0">
             <ul class="toolbar_submenu">
