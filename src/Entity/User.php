@@ -52,12 +52,6 @@ class User implements UserInterface
     private $products;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $lastLogin;
-
-    /**
      * @ORM\Column(type="boolean", options={"default": 1})
      */
     private $isActive;
@@ -76,6 +70,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="seller")
      */
     private $sales;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $last_login;
 
     public function __construct()
     {
@@ -243,18 +242,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getLastLogin(): ?\DateTimeInterface
-    {
-        return $this->lastLogin;
-    }
-
-    public function setLastLogin(\DateTimeInterface $lastLogin): self
-    {
-        $this->lastLogin = $lastLogin;
-
-        return $this;
-    }
-
     public function getIsActive(): ?bool
     {
         return $this->isActive;
@@ -343,6 +330,18 @@ class User implements UserInterface
                 $sale->setSeller(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->last_login;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $last_login): self
+    {
+        $this->last_login = $last_login;
 
         return $this;
     }

@@ -118,6 +118,8 @@ class AppFixtures extends Fixture {
             "password" => "password",
             "accountType" => "seller",
         ]);
+        $this->userService->setLastLogin ($user1);
+        $this->userService->setLastLogin ($user2);
         
         $product = new Product ();
         $product->setTitle("Harry Potter");
