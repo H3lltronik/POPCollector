@@ -118,7 +118,7 @@ class AppFixtures extends Fixture {
             "password" => "password",
             "accountType" => "seller",
         ]);
-        }
+        
         $product = new Product ();
         $product->setTitle("Harry Potter");
         $product->setDistribuitor("Panini");
