@@ -127,11 +127,11 @@ class AppFixtures extends Fixture {
         $product->setStock(20);
         $product->setPrice(2000);
         $product->setClicks(0);
+        $product->setIsVisible(true);
         $product->setAuthor("Jesucristo and Homie's");
         $product->setYear("2018");
         $product->setGenero(['Terror']);
         $product->setVerified(false);
-        $product->setIsVisible(false);
         $product->setPublisher($user2);
         $product->setVerificationComments("");
         $product->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed leo mauris. Duis sed nibh sollicitudin, efficitur turpis et, tempor turpis. Mauris vel elementum tortor. Nunc ac vehicula dui. Integer ultrices eget nunc at aliquam. Aenean venenatis tellus ut quam commodo egestas. Donec viverra massa est, id varius est imperdiet id. Integer aliquam mollis diam, quis sollicitudin odio. Proin augue augue, finibus eu euismod non, pretium sit amet elit. Donec enim felis, blandit at magna at, volutpat congue arcu.");
@@ -150,11 +150,11 @@ class AppFixtures extends Fixture {
         $product->setStock(20);
         $product->setPrice(3000);
         $product->setClicks(0);
+        $product->setIsVisible(true);
         $product->setAuthor("Jesucristo and Homie's");
         $product->setYear("2018");
         $product->setGenero(['Terror']);
         $product->setVerified(false);
-        $product->setIsVisible(false);
         $product->setPublisher($user2);
         $product->setVerificationComments("");
         $product->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed leo mauris. Duis sed nibh sollicitudin, efficitur turpis et, tempor turpis. Mauris vel elementum tortor. Nunc ac vehicula dui. Integer ultrices eget nunc at aliquam. Aenean venenatis tellus ut quam commodo egestas. Donec viverra massa est, id varius est imperdiet id. Integer aliquam mollis diam, quis sollicitudin odio. Proin augue augue, finibus eu euismod non, pretium sit amet elit. Donec enim felis, blandit at magna at, volutpat congue arcu.");

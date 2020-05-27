@@ -36,6 +36,7 @@ class UserService {
 
         $roles = $this->getRoles($values['accountType']);
         $user->setRoles($roles ?? []);
+        $user->setIsActive(true);
 
         $this->em->flush();
 
