@@ -104,9 +104,6 @@ export default {
         producttypeprop: {
             default: {},
         },
-        productID: {
-            default: null
-        },
         entityprop: {
             default: null
         }

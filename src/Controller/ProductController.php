@@ -36,6 +36,8 @@ class ProductController extends AbstractController {
         $productID = $request->query->get('productID', null);
         $productType = $em->getRepository(ProductType::class)->findOneBy(["id" => $productTypeID]);
 
+        dump($productType);
+
         $params = [
             "productType" => $productType
         ];
@@ -57,7 +59,7 @@ class ProductController extends AbstractController {
                 $params["authorLabel"] = "Director";
                 break;
             }
-            case "Serie": {
+            case "Series": {
                 $params["genres"] = $seriesGenres;
                 $params["authorLabel"] = "Director";
                 break;
@@ -85,6 +87,7 @@ class ProductController extends AbstractController {
         $params["editions"] = $productType->getProductEditions();
         $params["productID"] = $productID;
         
+        dump($params);
 
         return $this->render('product/form.html.twig', $params);
     }

@@ -25,6 +25,7 @@ class ProductService {
     public function createProduct(array $values) {
         $product = new Product();
         $product = $this->editBase($product, $values);
+        $product->setIsVisible(true);
 
         $this->em->persist($product);
         $this->em->flush();
@@ -33,7 +34,7 @@ class ProductService {
     public function editProduct($productID, array $values) {
         $product = $this->em->getRepository(Product::class)->findOneBy(["id" => $productID]);
         $product = $this->editBase($product, $values);
-
+        
         $user = $this->security->getUser();
         $product->setPublisher($user);
 
@@ -52,6 +53,8 @@ class ProductService {
         $product->setDescription($values['description']);
         $product->setImages($values['images']);
         $product->setVerified(false);
+        $user = $this->security->getUser();
+        $product->setPublisher($user);
 
         // Relations
         $productTypeReq = $this->em->getRepository(ProductType::class)->findOneBy(["id" => $values['productType']]);

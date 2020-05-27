@@ -7,7 +7,7 @@
     genresprop="{{genres|serialize}}" distribuitorlabel="{{distribuitorLabel|default("Distribuidor")}}" 
     authorlabel="{{authorLabel|default("Autor")}}" namelabel="{{nameLabel|default("Nombre")}}"
     producttypeprop="{{productType|serialize}}" formatsprop="{{formats|serialize}}" editionsprop="{{editions|serialize}}"
-    productID="{{productID}}" entityprop="{{entity|serialize}}"></product-form-component>
+    entityprop="{{entity? entity|serialize : null}}"></product-form-component>
 {% endblock %}
 
 {% block javascripts %}
