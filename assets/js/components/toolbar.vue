@@ -1,6 +1,6 @@
 <template>
-    <div class="toolbar_container row mx-0 align-items-center">
-        <div class="toolbar_logo h-100 mr-lg-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>
+    <nav class="toolbar_container row mx-0 align-items-center navbar-dark bg-dark">
+        <div class="toolbar_logo h-100 ml-4 mr-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>
         <form action="/product/all" method="GET" class="toolbar_search">
             <div class="row mx-0">
                 <el-input class="w-100" name="searchParam" :placeholder="searchPlaceholder" v-model="form.busqueda">
@@ -26,14 +26,14 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
-                <el-badge :value="cart.length" class="item ml-lg-2">
+                <el-badge :value="cart.length" class="item ml-2 mr-4">
                     <el-button class="normal-button" icon="el-icon-shopping-cart-1" round @click="toggleCart"></el-button>
                 </el-badge>
             </div>
         </div>
 
         <cart-component :cart="cart"></cart-component>
-    </div>
+    </nav>
 </template>
 
 <script>

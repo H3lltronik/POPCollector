@@ -6,15 +6,20 @@
         currentcategory="{{currentCategory|default(null)}}" cartprop="{{cart|serialize}}">
         </toolbar-component>
 
-        <div class="toolbar_submenu_container mx-0">
-            <ul class="toolbar_submenu">
-                <a href="{{path('home')}}"><li>Inicio</li></a>
-                {% for category in categories %}
-                    <a href="{{path('product_all', {category: category.name})}} "><li>{{category.name}}</li></a>
-                {% endfor %}
-                <a href="{{path('se_busca_list')}}"><li>Se busca</li></a>
-                <a href=""><li>Contacto</li></a>
-            </ul>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <a class="nav-link" href="{{path('home')}}"><li class="nav-item">Inicio</li></a>
+                    {% for category in categories %}
+                        <a class="nav-link" href="{{path('product_all', {category: category.name})}} "><li class="nav-item">{{category.name}}</li></a>
+                    {% endfor %}
+                    <a class="nav-link" href="{{path('se_busca_list')}}"><li class="nav-item">Se busca</li></a>
+                    <a class="nav-link" href=""><li class="nav-item">Contacto</li></a>
+                </ul>
+            </div>
+        </nav>
     </div>
 </div>
