@@ -118,12 +118,13 @@ class AppFixtures extends Fixture {
             "password" => "password",
             "accountType" => "seller",
         ]);
-
+        }
         $product = new Product ();
         $product->setTitle("Harry Potter");
         $product->setDistribuitor("Panini");
         $product->setStock(20);
         $product->setPrice(2000);
+        $product->setClicks(0);
         $product->setAuthor("Jesucristo and Homie's");
         $product->setYear("2018");
         $product->setGenero(['Terror']);
@@ -146,6 +147,7 @@ class AppFixtures extends Fixture {
         $product->setDistribuitor("Panini");
         $product->setStock(20);
         $product->setPrice(3000);
+        $product->setClicks(0);
         $product->setAuthor("Jesucristo and Homie's");
         $product->setYear("2018");
         $product->setGenero(['Terror']);

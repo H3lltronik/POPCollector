@@ -53,6 +53,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $lastLogin;
 
