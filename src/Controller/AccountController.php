@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Product;
+use App\Entity\Subscription;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -36,7 +37,6 @@ class AccountController extends AbstractController {
             $query->orderBy("amout", "ASC");
             $query->setMaxResults(6);
 
-            dump($query->getQuery()->getResult());
             $params["products"] = $query->getQuery()->getResult();
         }
 
@@ -48,8 +48,10 @@ class AccountController extends AbstractController {
      */
     public function idView(int $id = 0, Security $security, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator) {
         $user = $em->getRepository(User::class)->findOneBy(["id" => $id]);
+        $userLogged = $security->getUser();
         $page = $request->query->get('page', 1);
         $private = false;
+        $subscribed = false;
 
         $repo = $em->getRepository(Product::class);
         $query = $repo->createQueryBuilder("product");
@@ -58,13 +60,40 @@ class AccountController extends AbstractController {
 
         $pagination = $paginator->paginate($query, $page, 16);
 
+        if (isset($user))
         if (in_array("ROLE_SELLER", $user->getRoles())) {
             $private = true;
+        }
+
+        $roles = ($userLogged)? $userLogged->getRoles():[];
+        $subscriptions = ($userLogged)? $userLogged->getSubscriptions():[];
+
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->getId() == $user->getId())
+                $subscribed = true;
         }
 
         return $this->render("account/details.html.twig", [
             "user" => $private? $user:null,
             "pagination" => $pagination,
+            "isBuyer" => in_array("ROLE_BUYER", $roles),
+            "subscribed" => $subscribed
         ]);
+    }
+
+    /**
+     * @Route("/subscribe/id/", name="subscribe_id")
+     */
+    public function subscribe(Security $security, EntityManagerInterface $em, Request $request) {
+        $userLogged = $security->getUser();
+        $account = $request->query->get('account', 0);
+
+        $user = $em->getRepository(User::class)->findOneBy(["id" => $account]);
+        $userLogged->addSubscription($user);
+
+        $em->persist($userLogged);
+        $em->flush();
+
+        return $this->json(["status" => "ok"], 200);
     }
 }

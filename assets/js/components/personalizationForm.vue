@@ -7,12 +7,12 @@
                         <el-input v-model="form.name" placeholder="Nombre"></el-input>
                     </el-form-item>
                 </div>
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6" v-if="!isseller">
                     <el-form-item label="Apellido paterno">
                         <el-input v-model="form.father" placeholder="Apellido paterno"></el-input>
                     </el-form-item>
                 </div>
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6" v-if="!isseller">
                     <el-form-item label="Apellido materno">
                         <el-input v-model="form.mother" placeholder="Apellido materno"></el-input>
                     </el-form-item>
@@ -71,6 +71,9 @@ export default {
         },
         header: {
             default: "Header"
+        },
+        isseller: {
+            defaul: false
         }
     },
     data() {

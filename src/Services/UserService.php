@@ -15,7 +15,7 @@ class UserService {
         $this->accountRoles = [
             "buyer" => ["ROLE_BUYER"],
             "seller" => ["ROLE_SELLER"],
-            "checker" => ["ROLE_CHECKER"],
+            "verificator" => ["ROLE_VERIFICATOR"],
             "admin" => ["ROLE_ADMIN"]
         ];
     }
@@ -82,7 +82,7 @@ class UserService {
             ]);
         } else if (in_array("ROLE_VERIFICATOR", $user->getRoles())) {
             array_push($opts, [
-                "href" => "/product/create/categories",
+                "href" => "/verifications",
                 "text" => "Verificaciones",
             ]);
         }

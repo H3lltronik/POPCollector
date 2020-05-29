@@ -1,0 +1,16 @@
+<el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
+    <div class="d-flex flex-column">
+        <div class="product_small_image">
+            <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
+        </div>
+
+        <div class="product_small_title mt-lg-2">{{product.title}}
+            {% if product.verified is not null %}
+                {% if product.verified %}
+                    <el-button class="ml-3" disabled icon="el-icon-check" size="mini" type="success" circle icon></el-button>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="product_small_price">${{product.price}}</div>
+    </div>
+</el-link>

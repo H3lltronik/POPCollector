@@ -56,16 +56,7 @@
                 </div>
                 {% for product in busqueda.recommendations %}
                     <div class="col-6 col-lg-4 product_small_container mt-lg-3">
-                        <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
-                            <div class="d-flex flex-column">
-                                <div class="product_small_image">
-                                    <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
-                                </div>
-
-                                <div class="product_small_title mt-lg-2">{{product.title}}</div>
-                                <div class="product_small_price">${{product.price}}</div>
-                            </div>
-                        </el-link>
+                        {{render_product(product)}}
                     </div>
                 {% endfor %}
             </div>

@@ -4,7 +4,7 @@
 
 {% block body %}
     {% if user is not null %}
-        <div class="row">
+        <div class="row" id="vue">
             <div class="col-12 col-lg-12">
                 <div class="row align-items-baseline">
                     <span class="product_page_year mt-3 mr-2"><b>Detalles de la cuenta</b> </span>
@@ -13,10 +13,13 @@
                     <span class="product_page_description mt-2 mr-2"><b>Nombre:</b> </span> <span class="product_page_description">{{user.personalization.name}}</span>
                 </div>
                 <div class="row align-items-baseline">
-                    <span class="product_page_description mt-2 mr-2"><b>Apellido paterno:</b> </span> <span class="product_page_description">{{user.personalization.fatherLastName}}</span>
+                    {# <span class="product_page_description mt-2 mr-2"><b>Apellido paterno:</b> </span> <span class="product_page_description">{{user.personalization.fatherLastName}}</span> #}
                 </div>
                 <div class="row align-items-baseline">
-                    <span class="product_page_description mt-2 mr-2"><b>Apellido materno:</b> </span> <span class="product_page_description">{{user.personalization.motherLastName}}</span>
+                    {# <span class="product_page_description mt-2 mr-2"><b>Apellido materno:</b> </span> <span class="product_page_description">{{user.personalization.motherLastName}}</span> #}
+                    {% if app.user.id|default(null) != user.id and isBuyer and subscribed != true %}
+                        <div class="col-10 col-lg-3"><button id="suscribe" type="button" class="btn btn-primary mb-2">Suscribirse</button></div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-12 col-lg-12">
@@ -27,18 +30,9 @@
                     {% for product in pagination.items %}
                         {% if product.isVisible %}
                             <div class="col-12 col-lg-3">
-                                <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
-                                    <div class="d-flex flex-column">
-                                        <div class="product_small_image">
-                                            <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
-                                        </div>
-
-                                        <div class="product_small_title mt-lg-2">{{product.title}}</div>
-                                        <div class="product_small_price">${{product.price}}</div>
-                                    </div>
-                                </el-link>
+                                {{render_product(product)}}
                             </div>
-                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             {{ knp_pagination_render(pagination) }}
@@ -50,5 +44,26 @@
 {% endblock %}
 
 {% block javascripts %}
-
+    <script>
+        let vueProd = new Vue({
+            el: "vue",
+        })
+        $("#suscribe").click(() => {
+            $.post("{{path('subscribe_id', {account: user.id})}}").then(res => {
+                $("#submit").prop("disabled", false);
+                vueProd.$notify({
+                    title: "Te has suscrito",
+                    type: "success",
+                    message: "Puedes ver sus sucripciones en tu perfil"
+                })
+                window.location.reload()
+            }).catch(err => {
+                vueProd.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: "Ocurrio un error"
+                })
+            })
+        })
+    </script>
 {% endblock %}

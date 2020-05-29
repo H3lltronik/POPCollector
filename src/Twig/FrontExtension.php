@@ -29,6 +29,7 @@ class FrontExtension extends AbstractExtension {
         return [
             new TwigFunction('render_toolbar', [$this, 'renderToolbar'], ['is_safe' => ['html']]),
             new TwigFunction('render_personalization', [$this, 'renderPersonalization'], ['is_safe' => ['html']]),
+            new TwigFunction('render_product', [$this, 'renderProduct'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -55,6 +56,7 @@ class FrontExtension extends AbstractExtension {
     public function renderPersonalization($user) {
         $states = $this->em->getRepository(State::class)->findAll();
         $header = "";
+        $isseller = false;
         if (isset($user)) {
             $noPersonalization = ($user->getPersonalization() == null);
 
@@ -62,6 +64,7 @@ class FrontExtension extends AbstractExtension {
                 $header = "Direccion de envio";
             } else if (in_array("ROLE_SELLER", $user->getRoles())) {
                 $header = "Direccion de establecimiento";
+                $isseller = true;
             }
         }
         else
@@ -71,9 +74,16 @@ class FrontExtension extends AbstractExtension {
             "states" => $states,
             "noPersonalization" => $noPersonalization,
             "header" => $header,
+            "isseller" => $isseller,
         ];
 
         return $this->templating->render('common/personalization.html.twig', $params);
+    }
+
+    public function renderProduct($product) {
+        return $this->templating->render('common/product.html.twig', [
+            "product" => $product
+        ]);
     }
 
 }

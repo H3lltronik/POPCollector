@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <div class="product_page-title mb-lg-3">{{category|default("Todo")}}</div>
+    <div class="row">
+        {% for verification in verifications %}
+            {% if verification.product.isVisible %}
+                <div class="col-12 col-lg-3">
+                    <el-link :underline="false" href="{{ path("product_details", {id: verification.product.id}) }}">
+                        <div class="d-flex flex-column">
+                            <div class="product_small_image">
+                                <img class="image-cover" src="{{asset('uploads/products/'~ verification.product.images[0].name)}}" alt="">
+                            </div>
+
+                            <div class="product_small_title mt-lg-2">{{verification.product.title}}</div>
+                            <div class="product_small_price">Soliciado en {{verification.createdAt|date("Y-m-d")}}</div>
+                        </div>
+                    </el-link>
+                </div>
+                {% endif %}
+        {% endfor %}
+    </div>
+    {{ knp_pagination_render(pagination) }}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

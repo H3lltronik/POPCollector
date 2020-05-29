@@ -1,7 +1,7 @@
 <template>
     <div class="toolbar_container row mx-0 align-items-center">
         <div class="toolbar_logo h-100 mr-lg-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>
-        <!-- <search-component></search-component> -->
+        <search-component></search-component>
 
         <div class="flex-grow-1"></div>
 

@@ -7,7 +7,7 @@
     {% if product != null %}
         <div class="col-12 col-lg-5">
             <!-- Slider main container -->
-            <div class="w-100 text-center">Publicado por: <a href="">{{product.publisher.personalization.name}}</a></div>
+            <div class="w-100 text-center">Publicado por: <a href="{{path("account_id", {id: product.publisher.id})}}">{{product.publisher.personalization.name}}</a></div>
             <div class="swiper-container main-carousel h-100">
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
@@ -22,14 +22,22 @@
             </div>
         </div>
         <div class="col-12 col-lg-7">   
-            <div class="product_page_title">{{product.title}}</div>
+            <div class="product_page_title mt-5 mt-lg-0 d-flex align-items-center">{{product.title}}
+                {% if product.verified is not null %}
+                    {% if product.verified %}
+                        <el-button class="ml-3" disabled icon="el-icon-check" type="success" circle icon></el-button>
+                    {% else %}
+                        <el-button class="ml-3" disabled icon="el-icon-close" type="danger" circle icon></el-button>
+                    {% endif %}
+                {% endif %}
+            </div>
             <div class="product_page_distribuitor">- {{product.distribuitor}} <small class="text-muted">({{product.year}})</small></div>
             <div class="product_page_author">- {{product.author}}</div>
             <div class="product_page_year">- ${{product.price}} <small class="text-muted">({{product.stock}} disponibles)</small></div>
-            <div class="product_page_description mt-lg-4">{{product.description}}</div>
+            <div class="product_page_description mt-4 mt-lg-4">{{product.description}}</div>
 
-            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null %}
-                <div class="row justify-content-around mt-lg-3">
+            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null and verificator != true %}
+                <div class="row justify-content-around mt-4 mt-lg-3">
                     <div class="col-6 col-lg-3">
                         <form action="{{path('cart_add')}}">
                             <div class="row">
@@ -41,7 +49,10 @@
                             <input hidden type="text" id="idProduct" name="idProduct" value="{{product.id}}">
                         </form>
                     </div>
-                    <button id="wishlist" type="button" class="btn btn-primary mb-2">Añadir a Wishlist</button>
+                    <button id="wishlist" type="button" class="btn btn-info mb-2">Añadir a Wishlist</button>
+                    {% if product.verified != true %}
+                        <button id="verification" type="button" class="btn btn-warning mb-2">Solicitar Verificacion</button>
+                    {% endif %}
                 </div>
             {% elseif app.user.id|default(null) == product.publisher.id %}
                 <div class="row justify-content-around mt-lg-3">
@@ -54,10 +65,38 @@
                     </div>
                 </div>
             {% endif %}
-            
         </div>
 
-        <div class="col-12 mt-lg-5 mb-lg-3">
+        {% if verificator %}
+            <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
+                <div class="row">
+                    <span class="product_page_title">Verificar</span>
+                </div>
+                <div class="row">
+                    <div class="w-100 text-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="approved">
+                            <label class="custom-control-label" for="approved">Aprovado</label>
+                        </div>
+                        <textarea id="ver-comments" name="comments" class="form-control" placeholder="Comentarios" rows="5"></textarea>
+                        <button id="verificate" type="verificate" class="btn btn-primary mt-2">Enviar veredicto</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if app.user.id|default(null) == product.publisher.id %}
+            <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
+                <div class="row">
+                    <span class="product_page_title">Comentarios de verificador <small class="text-muted product_page_year">(solo tu puedes ver esto)</small></span>
+                </div>
+
+                <div class="product_page_description mt-4 mt-lg-4">{{product.verificationComments}}</div>
+            </div>
+        {% endif %}
+        
+
+        <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
             <div class="row">
                 <span class="product_page_title">Relacionados</span>
             </div>
@@ -65,16 +104,7 @@
             <div class="row owl-carousel owl-carousel owl-theme">
                 {% for product in related %}
                     <div class="product_small_container">
-                        <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
-                            <div class="d-flex flex-column">
-                                <div class="product_small_image">
-                                    <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
-                                </div>
-
-                                <div class="product_small_title mt-lg-2">{{product.title}}</div>
-                                <div class="product_small_price">${{product.price}}</div>
-                            </div>
-                        </el-link>
+                        {{render_product(product)}}
                     </div>
                 {% endfor %}
             </div>
@@ -136,11 +166,63 @@
                     type: "success",
                     message: "Todo correcto"
                 })
+                window.location.reload()
             }).catch(err => {
                 vueProd.$notify({
                     title: "Error",
                     type: "error",
                     message: "Ocurrio un error"
+                })
+            })
+        })
+
+        $("#verification").click(e => {
+            $.post("{{path("product_verification", {idProduct: product.id})}}").then((res) => {
+                console.log("res", res);
+                vueProd.$notify({
+                    title: "Verificacion solicitada",
+                    type: "success",
+                    message: "Todo correcto"
+                })
+            }).catch(err => {
+                console.log("err", err);
+                let message = "Ocurrio un error";
+                let type = "error";
+                let title = "Error";
+                if (err.status == 409) {
+                    message = "Alguien ya ha solicitado la verificacion de este producto"
+                    type = "info"
+                    title = "Verificacion solicitada"
+                }
+                vueProd.$notify({
+                    title,
+                    type,
+                    message,
+                })
+            })
+        })
+
+        $("#verificate").click(e => {
+            let approved = ($("#approved").is(":checked"))? 1:0;
+            let verComments = $("#ver-comments").val();
+            let id = "{{product.verifications.id|default(0)}}"
+            $.post("{{path("product_verificate")}}", {approved, verComments, id}).then((res) => {
+                console.log("res", res);
+                vueProd.$notify({
+                    title: "Verificacion publicada",
+                    type: "success",
+                    message: "Todo correcto"
+                })
+                window.location.reload()
+            }).catch(err => {
+                console.log("err", err);
+                let message = "Ocurrio un error";
+                let type = "error";
+                let title = "Error";
+                vueProd.$notify({
+                    title,
+                    type,
+                    message,
                 })
             })
         })
