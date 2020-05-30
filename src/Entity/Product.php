@@ -58,7 +58,7 @@ class Product
     private $genero = [];
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $verified;
 
@@ -136,6 +136,11 @@ class Product
      * @ORM\ManyToMany(targetEntity=SeBusca::class, mappedBy="recommendations")
      */
     private $seBuscas;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Verifications::class, mappedBy="product", cascade={"persist"})
+     */
+    private $verifications;
 
     public function __construct()
     {
@@ -471,6 +476,24 @@ class Product
         if ($this->seBuscas->contains($seBusca)) {
             $this->seBuscas->removeElement($seBusca);
             $seBusca->removeRecommendation($this);
+        }
+
+        return $this;
+    }
+
+    public function getVerifications(): ?Verifications
+    {
+        return $this->verifications;
+    }
+
+    public function setVerifications(?Verifications $verifications): self
+    {
+        $this->verifications = $verifications;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newProduct = null === $verifications ? null : $this;
+        if ($verifications->getProduct() !== $newProduct) {
+            $verifications->setProduct($newProduct);
         }
 
         return $this;

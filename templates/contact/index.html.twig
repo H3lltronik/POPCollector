@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+
+<div class="row" id="prod">
+    
+    <div class="form-box" style="max-width: 500px; margin: auto; padding: 50px; background: #ffffff; border: 10px solid #f2f2f2;">
+        <h1>Contactanos</h1>
+        <form>
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                    <input class="form-control" id="name" type="text" name="Name">
+                </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                    <input class="form-control" id="email" type="email" name="Email">
+                </div>
+            <div class="form-group">
+                <label for="email">Motivo</label>
+                    <select id="motive">
+                        <option data-tokens="El producto es falso">El producto es falso</option>
+                        <option data-tokens="El paquete que recibi no es el que pedi">El paquete que recibi no es el que pedi</option>
+                        <option data-tokens="No recibi mi paquete">No recibi mi paquete</option>
+                        <option data-tokens="Otro">Otro</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="message">Mensaje</label>
+                <textarea class="form-control" id="message" name="Message"></textarea>
+            </div>
+                <input id="enviar" class="btn btn-primary" type="button" value="Enviar" />
+            </div>
+        </form>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let vueProd = new Vue({
+            el: "#prod",
+        })
+        $("#enviar").click(e => {
+            vueProd.$notify({
+                title: "Enviando correo",
+                type: "info",
+                message: "Por favor espere"
+            })
+
+            let name = $("#name").val()
+            let email = $("#email").val()
+            let motive = $("#motive option:selected" ).text()
+            let message = $("#message").val()
+
+            $.post("{{path('contact_send')}}", {name, email, motive, message})
+            .done(() => {
+                vueProd.$notify({
+                    title: "Correo enviado",
+                    type: "success",
+                    message: "El correo de contacto ha sido enviado"
+                })
+                window.location.reload()
+            })
+            .fail((e) => {
+                console.log("Error", e)
+                vueProd.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: e.responseJSON.message
+                })
+            })
+        });
+    </script>
+{% endblock %}

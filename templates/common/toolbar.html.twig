@@ -13,15 +13,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <a class="nav-link" href="{{path('home')}}"><li class="nav-item">Inicio</li></a>
+                    <a class="nav-link" href="{{path('home')}}"><li>Inicio</li></a>
                     {% for category in categories %}
-                        <a class="nav-link" href="{{path('product_all', {category: category.name})}} "><li class="nav-item">{{category.name}}</li></a>
+                        <a class="nav-link" href="{{path('product_all', {category: category.name})}} "><li>{{category.name}}</li></a>
                     {% endfor %}
-                    <a class="nav-link" href="{{path('se_busca_list')}}"><li class="nav-item">Se busca</li></a>
-                    <a class="nav-link" href=""><li class="nav-item">Contacto</li></a>
+                    <a class="nav-link" href="{{path('se_busca_list')}}"><li>Se busca</li></a>
+                    <a class="nav-link" href="{{path('contact')}}"><li>Contacto</li></a>
                 </ul>
             </div>
             
         </nav>        
+        {# <search-component></search-component> #}
+
     </div>
 </div>

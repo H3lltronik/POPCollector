@@ -3,9 +3,26 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    {% if user is not null %}
-        <div class="row">
-            <div class="col-12 col-lg-12">
+    {% if app.user.isAdmin %}
+        <h2 class="mt-2">Admin options</h2>
+        <div class="row mb-5 mt-4 justify-content-around">
+            <div class="col-6 col-lg-3">
+                <button id="delete" type="button" class="btn btn-primary mb-2" style="text-transform: capitalize;">{{suspended? "":"Des"}}habilitar cuenta</button>
+            </div>
+            {% if suspended == false %}
+                <div class="col-6 col-lg-3">
+                    <button id="edit" type="button" class="btn btn-primary mb-2">Editar cuenta</button>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if suspended == false %}
+            {{render_personalization (user, true, true, false)}}            
+        {% endif %}
+    {% endif %}
+    {% if user is not null and suspended == false %}
+        <div class="row" id="vue">
+            <div class="col-12 col-lg-6">
                 <div class="row align-items-baseline">
                     <span class="product_page_year mt-3 mr-2"><b>Detalles de la cuenta</b> </span>
                 </div>
@@ -13,42 +30,149 @@
                     <span class="product_page_description mt-2 mr-2"><b>Nombre:</b> </span> <span class="product_page_description">{{user.personalization.name}}</span>
                 </div>
                 <div class="row align-items-baseline">
-                    <span class="product_page_description mt-2 mr-2"><b>Apellido paterno:</b> </span> <span class="product_page_description">{{user.personalization.fatherLastName}}</span>
+                    {# <span class="product_page_description mt-2 mr-2"><b>Apellido paterno:</b> </span> <span class="product_page_description">{{user.personalization.fatherLastName}}</span> #}
                 </div>
                 <div class="row align-items-baseline">
-                    <span class="product_page_description mt-2 mr-2"><b>Apellido materno:</b> </span> <span class="product_page_description">{{user.personalization.motherLastName}}</span>
+                    {# <span class="product_page_description mt-2 mr-2"><b>Apellido materno:</b> </span> <span class="product_page_description">{{user.personalization.motherLastName}}</span> #}
+                    {% if app.user.id|default(null) != user.id and isBuyer and subscribed != true %}
+                        <div class="col-10 col-lg-3"><button id="suscribe" type="button" class="btn btn-primary mb-2">Suscribirse</button></div>
+                    {% endif %}
                 </div>
             </div>
-            <div class="col-12 col-lg-12">
-                <div class="row align-items-baseline my-lg-3">
-                    <span class="product_page_year mt-3 mr-2"><b>Productos</b> </span>
-                </div>
-                <div class="row">
-                    {% for product in pagination.items %}
-                        {% if product.isVisible %}
-                            <div class="col-12 col-lg-3">
-                                <el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
-                                    <div class="d-flex flex-column">
-                                        <div class="product_small_image">
-                                            <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
-                                        </div>
 
-                                        <div class="product_small_title mt-lg-2">{{product.title}}</div>
-                                        <div class="product_small_price">${{product.price}}</div>
-                                    </div>
-                                </el-link>
-                            </div>
-                            {% endif %}
-                    {% endfor %}
+            {% if user|default(false) %}
+                <div class="col-12 col-lg-6">
+                    <div class="row align-items-baseline">
+                        <span class="product_page_year mt-3 mr-2"><b>Informacion de {{user.isBuyer? "envio":"establecimiento"}}</b> </span>
+                    </div>
+                    <div class="row align-items-baseline">
+                        <span class="product_page_description mt-2 mr-2"><b>Estado:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.state.name}}</span>
+                    </div>
+                    <div class="row align-items-baseline">
+                        <span class="product_page_description mt-2 mr-2"><b>Direccion:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.address}}</span>
+                    </div>
+                    <div class="row align-items-baseline">
+                        <span class="product_page_description mt-2 mr-2"><b>Codigo postal:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.postalCode}}</span>
+                    </div>
+                    <div class="row align-items-baseline">
+                        <span class="product_page_description mt-2 mr-2"><b>Descripcion:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.description}}</span>
+                    </div>
+                    <div class="row align-items-baseline">
+                        <span class="product_page_description mt-2 mr-2"><b>Telefono:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.phone}}</span>
+                    </div>
                 </div>
-            {{ knp_pagination_render(pagination) }}
-            </div>
+                {% if user.isBuyer|default(false) %}
+                    <div class="col-12 col-lg-6">
+                        <div class="row align-items-baseline">
+                            <span class="product_page_year mt-3 mr-2"><b>Historial de compras</b> </span>
+                        </div>
+                        {% for ticket in user.tickets %}
+                            <div class="row align-items-baseline">
+                                <div class="col-12"><span class="product_page_description mt-2 mr-2"><b>Compra #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span></div>
+                                <div class="ml-3 ml-lg-5 col-12">
+                                {% for sale in ticket.sales %}
+                                    <div class="row">{{sale.product.title}} x{{sale.quantity}} = {{sale.price}}</div>        
+                                {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="row align-items-baseline">
+                            <span class="product_page_year mt-3 mr-2"><b>Subscripciones</b> </span>
+                        </div>
+                        {% for subscription in user.subscriptions %}
+                            <div class="row align-items-baseline">
+                                <div class="col-12">
+                                    <span class="product_page_description mt-2 mr-2"><b>Subscripcion #{{loop.index}}</b> <a class="ml-3" href="{{path("account_id", {id: subscription.id})}}">{{subscription.personalization.name}}</a></span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if user.isSeller|default(false) %}
+                <div class="col-12 col-lg-12">
+                    <div class="row align-items-baseline my-lg-3">
+                        <span class="product_page_year mt-3 mr-2"><b>Productos</b> </span>
+                    </div>
+                    <div class="row">
+                        {% for product in pagination.items %}
+                            {% if product.isVisible %}
+                                <div class="col-12 col-lg-3">
+                                    {{render_product(product)}}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {% endif %}
+            
         </div>
+    {% elseif suspended %}
+        <div style="width: 100%; height: 100%;" class="d-flex justify-content-center align-items-center"><h3>Esta cuenta esta desactivada</h3></div>
     {% else %}
-        <div style="width: 80vw; height: 70vh;" class="d-flex justify-content-center align-items-center"><h3>Esta cuenta es privada :c</h3></div>
+        <div style="width: 100%; height: 100%;" class="d-flex justify-content-center align-items-center"><h3>Esta cuenta es privada :c</h3></div>
     {% endif %}
+    
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+        let vueProd = new Vue({
+            el: "#vue",
+        })
+        $("#suscribe").click(() => {
+            vueProd.$notify({
+                title: "En proceso",
+                type: "info",
+                message: "Suscribiendose..."
+            })
+            $.post("{{path('subscribe_id', {account: user.id|default(0)})}}").then(res => {
+                $("#submit").prop("disabled", false);
+                vueProd.$notify({
+                    title: "Te has suscrito",
+                    type: "success",
+                    message: "Puedes ver sus sucripciones en tu perfil"
+                })
+                window.location.reload()
+            }).catch(err => {
+                vueProd.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: "Ocurrio un error"
+                })
+            })
+        })
 
+        {% if app.user.isAdmin %}
+        $("#delete").click(() => {
+            vueProd.$notify({
+                title: "En proceso",
+                type: "info",
+                message: "Realizando acciones..."
+            })
+            $.post("{{path('account_delete', {account: user.id|default(0)})}}").then(res => {
+                vueProd.$notify({
+                    title: "Exito",
+                    type: "success",
+                    message: res.message
+                })
+                window.location.reload()
+            }).catch(err => {
+                vueProd.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: "Ocurrio un error"
+                })
+            })
+        })
+        
+        $("#edit").click(() => {
+            openPersonalizationForm ();
+        })
+        {% endif %}
+    </script>
 {% endblock %}

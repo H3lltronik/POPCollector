@@ -1,3 +1,5 @@
 {% if noPersonalization == true %}
-    <personalization-form-component statesprop="{{states|serialize}}" submit="{{path("home_personalization_save")}}" header="{{header}}"></personalization-form-component>
+    <personalization-form-component statesprop="{{states|serialize}}" submit="{{path("home_personalization_save")}}" header="{{header}}"
+    isseller="{{isseller|serialize|raw}}" userdata="{{user|serialize}}" canclose="{{canclose|serialize|raw}}" opened="{{opened|serialize|raw}}">
+    </personalization-form-component>
 {% endif %}

@@ -29,20 +29,21 @@ class UserLastLoginCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $users = $this->em->getRepository(User::class)->findAll();
-        $todayDate = new \DateTime('now', new DateTimeZone('UTC')); $todayDate->setTime(0,0);
+        $output->writeln("XD");
+        // $users = $this->em->getRepository(User::class)->findAll();
+        // $todayDate = new \DateTime('now', new DateTimeZone('UTC')); $todayDate->setTime(0,0);
 
-        foreach ($users as $user) {
-            $lastLogin = $user->getLastLogin();
-            $months = ($lastLogin->diff($todayDate))->months;
+        // foreach ($users as $user) {
+        //     $lastLogin = $user->getLastLogin();
+        //     $months = ($lastLogin->diff($todayDate))->months;
 
-            if ($months >= 6) {
-                $user->setIsActive(false);
-                $this->em->persist($user);
-            }
-        }
+        //     if ($months >= 6) {
+        //         $user->setIsActive(false);
+        //         $this->em->persist($user);
+        //     }
+        // }
 
-        $this->em->flush();
+        // $this->em->flush();
 
         return 0;
     }

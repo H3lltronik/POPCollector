@@ -6,7 +6,7 @@ use App\Entity\State;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class StatesFixtures extends Fixture {
+class AppAStatesFixtures extends Fixture {
     public function load(ObjectManager $manager) {
         $state = new State();
         $state->setName("Aguascalientes");
@@ -132,9 +132,9 @@ class StatesFixtures extends Fixture {
         $state->setName("Veracruz");
         $manager->persist($state);
 
-        $state = new State();
-        $state->setName("Yucatán");
-        $manager->persist($state);
+        // $state = new State();
+        // $state->setName("Yucatán");
+        // $manager->persist($state);
 
         $manager->flush();
     }

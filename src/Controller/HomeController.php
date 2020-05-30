@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\State;
 use App\Entity\Personalization;
 use App\Entity\ShippingAddress;
@@ -37,7 +38,8 @@ class HomeController extends AbstractController {
      * @Route("/personalization/save", name="_personalization_save")
      */
     public function savePersonalization(Request $request, EntityManagerInterface $em, Security $security) {
-        $user = $security->getUser();
+        $userID = $request->request->get('id', null);
+        $user = $em->getReference(User::class, $userID);
         $name = $request->request->get('name', null);
         $father = $request->request->get('father', null);
         $mother = $request->request->get('mother', null);
@@ -47,16 +49,28 @@ class HomeController extends AbstractController {
         $phone = $request->request->get('phone', null);
         $state = $request->request->get('state', null);
 
-        $state = $em->getRepository(State::class)->findOneBy(["id" => $state]);
+        $state = $em->getReference(State::class, $state);
 
-        $personalization = new Personalization ();
+        $personalizationID = $request->request->get('personalizationID', null);
+        $shippingID = $request->request->get('shippingID', null);
 
+        if (isset($personalizationID)) {
+            $personalization = $em->getRepository(Personalization::class)->findOneBy(["id" => $personalizationID]);
+        } else {
+            $personalization = new Personalization ();
+        }
+        
         $personalization->setName($name);
         $personalization->setFatherLastName($father);
         $personalization->setMotherLastName($mother);
         $personalization->setUser($user);
 
-        $shipping = new ShippingAddress ();
+        if (isset($shippingID)) {
+            $shipping = $em->getRepository(ShippingAddress::class)->findOneBy(["id" => $shippingID]);
+        } else {
+            $shipping = new ShippingAddress ();
+        }
+
         $shipping->setAddress($address);
         $shipping->setDescription($description);
         $shipping->setPersonalization($personalization);

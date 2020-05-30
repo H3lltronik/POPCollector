@@ -3,14 +3,17 @@
 namespace App\DataFixtures;
 
 use App\Entity\Product;
-use App\Entity\ProductEdition;
-use App\Entity\ProductFormat;
 use App\Entity\ProductType;
+use App\Entity\ProductFormat;
 use App\Services\UserService;
+use App\Entity\ProductEdition;
+use App\Entity\Personalization;
+use App\Entity\ShippingAddress;
+use App\Entity\State;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture {
+class AppBFixtures extends Fixture {
     public function __construct(UserService $userService) {
         $this->userService = $userService;
     }
@@ -118,8 +121,68 @@ class AppFixtures extends Fixture {
             "password" => "password",
             "accountType" => "seller",
         ]);
+
+        $user3 = $this->userService->createUser([
+            "email" => "esau.egs2@gmail.com",
+            "password" => "password",
+            "accountType" => "verificator",
+        ]);
+
         $this->userService->setLastLogin ($user1);
         $this->userService->setLastLogin ($user2);
+        $this->userService->setLastLogin ($user3);
+
+        $state = new State();
+        $state->setName("Yucatán");
+        $manager->persist($state);
+
+        $personalization = new Personalization ();
+        $personalization->setName("Carlos Esau");
+        $personalization->setFatherLastName("Gonzalez");
+        $personalization->setMotherLastName("Soto");
+        $personalization->setUser($user1);
+        $shipping = new ShippingAddress ();
+        $shipping->setAddress("Tepocato 1");
+        $shipping->setDescription("No se donde vivo ayuda");
+        $shipping->setPersonalization($personalization);
+        $shipping->setPhone("3317354535");
+        $shipping->setPostalCode(44250);
+        $shipping->setState($state);
+
+        $manager->persist($personalization);
+        $manager->persist($shipping);
+
+        $personalization = new Personalization ();
+        $personalization->setName("Tienda de cosas");
+        $personalization->setFatherLastName("");
+        $personalization->setMotherLastName("");
+        $personalization->setUser($user2);
+        $shipping = new ShippingAddress ();
+        $shipping->setAddress("Tepocato 1");
+        $shipping->setDescription("No se donde vivo ayuda");
+        $shipping->setPersonalization($personalization);
+        $shipping->setPhone("3317354535");
+        $shipping->setPostalCode(44250);
+        $shipping->setState($state);
+
+        $manager->persist($personalization);
+        $manager->persist($shipping);
+
+        $personalization = new Personalization ();
+        $personalization->setName("Armando verificador");
+        $personalization->setFatherLastName("Ola");
+        $personalization->setMotherLastName("Adios");
+        $personalization->setUser($user3);
+        $shipping = new ShippingAddress ();
+        $shipping->setAddress("Tepocato 1");
+        $shipping->setDescription("No se donde vivo ayuda");
+        $shipping->setPersonalization($personalization);
+        $shipping->setPhone("3317354535");
+        $shipping->setPostalCode(44250);
+        $shipping->setState($state);
+
+        $manager->persist($personalization);
+        $manager->persist($shipping);
         
         $product = new Product ();
         $product->setTitle("Harry Potter");
@@ -131,7 +194,7 @@ class AppFixtures extends Fixture {
         $product->setAuthor("Jesucristo and Homie's");
         $product->setYear("2018");
         $product->setGenero(['Terror']);
-        $product->setVerified(false);
+        // $product->setVerified(null);
         $product->setPublisher($user2);
         $product->setVerificationComments("");
         $product->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed leo mauris. Duis sed nibh sollicitudin, efficitur turpis et, tempor turpis. Mauris vel elementum tortor. Nunc ac vehicula dui. Integer ultrices eget nunc at aliquam. Aenean venenatis tellus ut quam commodo egestas. Donec viverra massa est, id varius est imperdiet id. Integer aliquam mollis diam, quis sollicitudin odio. Proin augue augue, finibus eu euismod non, pretium sit amet elit. Donec enim felis, blandit at magna at, volutpat congue arcu.");
@@ -154,7 +217,7 @@ class AppFixtures extends Fixture {
         $product->setAuthor("Jesucristo and Homie's");
         $product->setYear("2018");
         $product->setGenero(['Terror']);
-        $product->setVerified(false);
+        // $product->setVerified(null);
         $product->setPublisher($user2);
         $product->setVerificationComments("");
         $product->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed leo mauris. Duis sed nibh sollicitudin, efficitur turpis et, tempor turpis. Mauris vel elementum tortor. Nunc ac vehicula dui. Integer ultrices eget nunc at aliquam. Aenean venenatis tellus ut quam commodo egestas. Donec viverra massa est, id varius est imperdiet id. Integer aliquam mollis diam, quis sollicitudin odio. Proin augue augue, finibus eu euismod non, pretium sit amet elit. Donec enim felis, blandit at magna at, volutpat congue arcu.");

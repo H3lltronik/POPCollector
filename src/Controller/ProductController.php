@@ -3,22 +3,30 @@
 namespace App\Controller;
 
 use DateTime;
+use DateTimeZone;
 use App\Entity\Product;
 use App\Entity\ProductType;
 use App\Entity\ProductFormat;
+use App\Entity\Verifications;
 use App\Entity\ProductEdition;
 use App\Services\ProductService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/product", name="product")
  */
 class ProductController extends AbstractController {
+
+    public function __construct(Security $security) {
+        $this->security = $security;
+    }
     /**
      * @Route("/", name="")
      */
@@ -107,6 +115,7 @@ class ProductController extends AbstractController {
      * @Route("/id/{id}", name="_details")
      */
     public function product(int $id = 0, EntityManagerInterface $em, ProductService $productService) {
+        $user = $this->security->getUser();
         $product = $em->getRepository(Product::class)->findOneBy(["id" => $id]);
         $visible = $product->getIsVisible();
 
@@ -117,9 +126,12 @@ class ProductController extends AbstractController {
         $relatedProducts = $productService->getRelatedProducts 
             ($product->getProductType()->getName(), 6, $product->getId());
 
+        $roles = ($user)? $user->getRoles():[];
+
         return $this->render('product/index.html.twig', [
             "product" => $visible? $product : null,
             "related" => $relatedProducts,
+            "verificator" => in_array("ROLE_VERIFICATOR", $roles),
         ]);
     }
 
@@ -156,7 +168,7 @@ class ProductController extends AbstractController {
     /**
      * @Route("/wishlist", name="_wishlist", methods={"GET"})
      */
-    public function wishlist (Request $request, ProductService $productService, EntityManagerInterface $em) {
+    public function wishlist (Request $request, ProductService $productService) {
         $productID = $request->query->get('idProduct', 1);
         $productService->addProductToWishlist($productID);
         
@@ -218,5 +230,25 @@ class ProductController extends AbstractController {
      */
     public function checkProductClicks() {
         
+    }
+
+    /**
+     * @Route("/product/verification", name="_verification", methods={"POST"})
+     */
+    public function requestVerification(Request $request, EntityManagerInterface $em) {
+        $productID = $request->query->get('idProduct', 1);
+        $verification = new Verifications ();
+        $verification->setCreatedAt(new DateTime("now", new DateTimeZone('America/Mexico_City') ));
+        $verification->setProduct($em->getReference(Product::class, $productID));
+
+        try {
+            $em->persist($verification);
+            $em->flush();
+        }
+        catch (UniqueConstraintViolationException $e) {
+            return $this->json(["status" => "duplicated"], 409);
+        }
+
+        return JsonResponse::create(["status" => "ok"]);
     }
 }

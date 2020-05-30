@@ -6,16 +6,18 @@ use DateTime;
 use DateTimeZone;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService {
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder) {
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, Security $security) {
         $this->em = $em;
+        $this->security = $security;
         $this->encoder = $encoder;
         $this->accountRoles = [
             "buyer" => ["ROLE_BUYER"],
             "seller" => ["ROLE_SELLER"],
-            "checker" => ["ROLE_CHECKER"],
+            "verificator" => ["ROLE_VERIFICATOR"],
             "admin" => ["ROLE_ADMIN"]
         ];
     }
@@ -58,7 +60,7 @@ class UserService {
             ],
         ];
 
-        if (in_array("ROLE_BUYER", $user->getRoles())) {
+        if ($this->hasRole(["ROLE_BUYER", "ROLE_ADMIN"])) {
             array_push($opts, [
                 "href" => "/user/wishlist",
                 "text" => "Wishlist",
@@ -71,7 +73,8 @@ class UserService {
                 "href" => "/se-busca/list/own",
                 "text" => "Ver busquedas",
             ]);
-        } else if (in_array("ROLE_SELLER", $user->getRoles())) {
+        } 
+        if ($this->hasRole(["ROLE_SELLER", "ROLE_ADMIN"])) {
             array_push($opts, [
                 "href" => "/product/create/categories",
                 "text" => "Publicar producto",
@@ -80,9 +83,10 @@ class UserService {
                 "href" => "/",
                 "text" => "Estadisticas",
             ]);
-        } else if (in_array("ROLE_VERIFICATOR", $user->getRoles())) {
+        } 
+        if ($this->hasRole(["ROLE_VERIFICATOR", "ROLE_ADMIN"])) {
             array_push($opts, [
-                "href" => "/product/create/categories",
+                "href" => "/verifications",
                 "text" => "Verificaciones",
             ]);
         }
@@ -94,5 +98,19 @@ class UserService {
         $user->setLastLogin(new DateTime("now", new DateTimeZone('America/Mexico_City') ));
         $this->em->persist($user);
         $this->em->flush();
+    }
+
+    public function hasRole(array $roles) {
+        $user = $this->security->getUser();
+        if (!isset($user)) {
+            return false;
+        }
+        $userRoles = $user->getRoles();
+
+        if (count(array_intersect($userRoles, $roles)) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

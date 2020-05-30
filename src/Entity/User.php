@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -76,12 +78,20 @@ class User implements UserInterface
      */
     private $last_login;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="subscriptions")
+     */
+    private $subscriptions;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->seBuscas = new ArrayCollection();
         $this->sales = new ArrayCollection();
+        $this->follower = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -344,5 +354,67 @@ class User implements UserInterface
         $this->last_login = $last_login;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(self $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(self $subscription): self
+    {
+        if ($this->subscriptions->contains($subscription)) {
+            $this->subscriptions->removeElement($subscription);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("isAdmin")
+     */
+    public function isAdmin() {
+        $roles = $this->getRoles();
+        if (in_array("ROLE_ADMIN", $roles))
+            return true;
+        else 
+            return false;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("isSeller")
+     */
+    public function isSeller() {
+        $roles = $this->getRoles();
+        if (in_array("ROLE_SELLER", $roles))
+            return true;
+        else 
+            return false;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("isBuyer")
+     */
+    public function isBuyer() {
+        $roles = $this->getRoles();
+        if (in_array("ROLE_BUYER", $roles))
+            return true;
+        else 
+            return false;
     }
 }
