@@ -1,14 +1,6 @@
 <template>
     <nav class="toolbar_container row mx-0 align-items-center navbar-dark bg-dark">
-        <div class="toolbar_logo h-100 ml-4 mr-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>
-        <form action="/product/all" method="GET" class="toolbar_search">
-            <div class="row mx-0">
-                <el-input class="w-100" name="searchParam" :placeholder="searchPlaceholder" v-model="form.busqueda">
-                    <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                </el-input>
-            </div>
-        </form>
-
+        <div class="toolbar_logo h-100 ml-4 mr-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>    
         <div class="flex-grow-1"></div>
 
         <div class="d-flex">
@@ -38,11 +30,13 @@
 
 <script>
 import Cart from './cart'
+import SearchBox from './searchBox'
 import { EventBus } from './eventBus.js';
 
 export default {
     components: {
         'cart-component': Cart,
+        'search-component': SearchBox,
     },
     props: {
         user: {
