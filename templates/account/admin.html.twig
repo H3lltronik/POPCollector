@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Account{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-lg-6 ">
+            <div class="row align-items-baseline">
+                <span class="product_page_year mt-3 mr-2"><b>Detalles de la cuenta</b> </span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Nombre:</b> </span> <span class="product_page_description">{{app.user.personalization.name}}</span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Apellido paterno:</b> </span> <span class="product_page_description">{{app.user.personalization.fatherLastName}}</span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Apellido materno:</b> </span> <span class="product_page_description">{{app.user.personalization.motherLastName}}</span>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="row align-items-baseline">
+                <span class="product_page_year mt-3 mr-2"><b>Informacion de establecimiento</b> </span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Estado:</b> </span> <span class="product_page_description">{{app.user.personalization.shippingAddress.state.name}}</span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Direccion:</b> </span> <span class="product_page_description">{{app.user.personalization.shippingAddress.address}}</span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Codigo postal:</b> </span> <span class="product_page_description">{{app.user.personalization.shippingAddress.postalCode}}</span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Descripcion:</b> </span> <span class="product_page_description">{{app.user.personalization.shippingAddress.description}}</span>
+            </div>
+            <div class="row align-items-baseline">
+                <span class="product_page_description mt-2 mr-2"><b>Telefono:</b> </span> <span class="product_page_description">{{app.user.personalization.shippingAddress.phone}}</span>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="row align-items-baseline">
+                <span class="product_page_year mt-3 mr-2"><b>Historial de compras</b> </span>
+            </div>
+            {% for ticket in app.user.tickets %}
+                <div class="row align-items-baseline">
+                    <div class="col-12"><span class="product_page_description mt-2 mr-2"><b>Compra #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span></div>
+                    <div class="ml-3 ml-lg-5 col-12">
+                    {% for sale in ticket.sales %}
+                        <div class="row">{{sale.product.title}} x{{sale.quantity}} = {{sale.price}}</div>        
+                    {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="row align-items-baseline">
+                <span class="product_page_year mt-3 mr-2"><b>Subscripciones</b> </span>
+            </div>
+            {% for subscription in app.user.subscriptions %}
+                <div class="row align-items-baseline">
+                    <div class="col-12">
+                        <span class="product_page_description mt-2 mr-2"><b>Subscripcion #{{loop.index}}</b> <a class="ml-3" href="{{path("account_id", {id: subscription.id})}}">{{subscription.personalization.name}}</a></span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-12 col-lg-6" style="max-height: 600px; overflow-y: auto; overflow-x: hidden;">
+            <div class="row align-items-baseline">
+                <span class="product_page_year mt-3 mr-2"><b>Historial de ventas</b> </span>
+            </div>
+            {% for ticket in app.user.sales %}
+                <div class="row align-items-baseline">
+                    <div class="col-12"><span class="product_page_description mt-2 mr-2"><b>Venta #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span></div>
+                    <div class="ml-3 ml-lg-5 col-12">
+                    {% for sale in ticket.sales %}
+                        <div class="row">{{sale.product.title}} x{{sale.quantity}} = {{sale.price}}</div>        
+                    {% endfor %} 
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div  class="col-sm-6 text-center">
+            <label class="label label-success">Productos mas vendidos</label>
+            <div id="bar-chart" ></div>
+
+            <label class="label label-success">Productos con mayores ingresos</label>
+            <div id="bar-chart2" ></div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script>
+        var data = [
+                {% for product in products %}
+                    { y: "{{product[0].title}}", a: {{product.amout}}},
+                {% endfor %}
+            ],
+            config = {
+            data: data,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Total vendidos', 'Total Outcome'],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['gray','red']
+        };
+        config.element = 'bar-chart';
+        config.stacked = true;
+        Morris.Bar(config);
+
+        var data2 = [
+                {% for product in products %}
+                    { y: "{{product[0].title}}", a: {{product.total}}},
+                {% endfor %}
+            ],
+            config = {
+            data: data2,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Total ingreso', 'Total Outcome'],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['gray','red']
+        };
+        config.element = 'bar-chart2';
+        config.stacked = true;
+        Morris.Bar(config);
+    </script>
+{% endblock %}

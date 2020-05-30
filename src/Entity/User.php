@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -378,5 +380,41 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("isAdmin")
+     */
+    public function isAdmin() {
+        $roles = $this->getRoles();
+        if (in_array("ROLE_ADMIN", $roles))
+            return true;
+        else 
+            return false;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("isSeller")
+     */
+    public function isSeller() {
+        $roles = $this->getRoles();
+        if (in_array("ROLE_SELLER", $roles))
+            return true;
+        else 
+            return false;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("isBuyer")
+     */
+    public function isBuyer() {
+        $roles = $this->getRoles();
+        if (in_array("ROLE_BUYER", $roles))
+            return true;
+        else 
+            return false;
     }
 }

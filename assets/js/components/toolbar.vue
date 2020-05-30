@@ -13,7 +13,7 @@
                         <el-button class="normal-button" type="primary" icon="el-icon-user-solid" round></el-button> 
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="(opt, index) in menuOpts" :key="index">
-                                <el-link :underline="false" :href="opt.href" >
+                                <el-link :underline="false" :href="opt.href" style="width: 100%; height: 100%;">
                                     {{opt.text}}
                                 </el-link>
                             </el-dropdown-item>                                

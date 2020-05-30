@@ -53,7 +53,7 @@ class FrontExtension extends AbstractExtension {
         return $this->templating->render('common/toolbar.html.twig', $params);
     }
 
-    public function renderPersonalization($user) {
+    public function renderPersonalization($user, $forceOpen = false, $canClose = false, $opened = true) {
         $states = $this->em->getRepository(State::class)->findAll();
         $header = "";
         $isseller = false;
@@ -72,10 +72,15 @@ class FrontExtension extends AbstractExtension {
 
         $params = [
             "states" => $states,
-            "noPersonalization" => $noPersonalization,
+            "noPersonalization" => ($forceOpen)? $forceOpen:$noPersonalization,
             "header" => $header,
             "isseller" => $isseller,
+            "user" => $user,
+            "canclose" => $canClose,
+            "opened" => $opened,
         ];
+
+        dump($params);
 
         return $this->templating->render('common/personalization.html.twig', $params);
     }
