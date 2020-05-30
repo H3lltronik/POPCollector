@@ -67,6 +67,7 @@ class CartService {
             $products[$key]["id"] = $productFound->getId();
             $products[$key]["quantity"] = $product["quantity"];
             $products[$key]["total"] = "$".$productFound->getPrice() * $product["quantity"];
+            $products[$key]["totalPrice"] = $productFound->getPrice() * $product["quantity"];
         }
 
         return $products;

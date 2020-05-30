@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-dialog title="Carrito" :visible.sync="dialog" center>
+            <!-- {{cart}} -->
             <el-table :data="cart" height="400" style="width: 850px">
                 <el-table-column prop="product.title" label="Producto" width="250"></el-table-column>
                 <el-table-column prop="product.priceText" label="Precio"></el-table-column>
@@ -14,8 +15,9 @@
                 </el-table-column>
             </el-table>
 
-            <div class="w-100 d-flex" v-if="cart.length > 0">
-                <el-button class="mx-auto" primary @click="buyCart">Realizar compra</el-button>
+            <div class="w-100 d-flex justify-content-center" v-if="cart.length > 0">
+                <!-- <el-button class="mx-auto" primary @click="buyCart">Realizar compra</el-button> -->
+                <paypal-button :items="cart"></paypal-button>
             </div>
         </el-dialog>  
     </div>
@@ -24,8 +26,12 @@
 <script>
 import { EventBus } from './eventBus.js';
 import axios from 'axios';
+import paypal from './paypal'
 
 export default {
+    components: {
+        'paypal-button': paypal,
+    },
     props: {
         cart: {
             default: () => { return [] }
@@ -39,6 +45,9 @@ export default {
     created () {
         EventBus.$on("toggle-cart", () => {
             this.dialog = !this.dialog
+        })
+        EventBus.$on("paypal-purchased", () => {
+            this.buyCart ();
         })
         console.log("cart", this.cart)
     },
@@ -60,24 +69,18 @@ export default {
             })
         },
         buyCart () {
-            this.$confirm("¿Estas seguro de que deseas realizar esta accion?", 'Compra', {
-                confirmButtonText: 'OK',
-                cancelButtonText: 'Cancelar',
-                type: 'warning'
-            }).then(() => {
-                axios.post("/cart/buy").then(() => {
-                    this.$notify({
-                        title: "Productos comprados",
-                        type: "success",
-                        message: "Se ha registrado su compra",
-                    })
-                    window.location.reload()
-                }).catch(err => {
-                    this.$notify({
-                        title: "Error",
-                        type: "error",
-                        message: "Error al registrar su compra",
-                    })
+            axios.post("/cart/buy").then(() => {
+                this.$notify({
+                    title: "Productos comprados",
+                    type: "success",
+                    message: "Se ha registrado su compra",
+                })
+                window.location.reload()
+            }).catch(err => {
+                this.$notify({
+                    title: "Error",
+                    type: "error",
+                    message: "Error al registrar su compra",
                 })
             })
         }
