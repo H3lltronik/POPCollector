@@ -73,6 +73,8 @@ class ProductService {
         $repo = $this->em->getRepository(Product::class);
         $query = $repo->createQueryBuilder("product");
         $query = $repo->addJoinTo($query, 'App\Entity\ProductType', "type", "product.productType");
+        $query = $repo->addJoinTo($query, 'App\Entity\User', "publisher", "product.publisher");
+        $query->andWhere("publisher.isActive = 1");
         $query->andWhere("type.Name = :val")->setParameter("val", $category);
 
         return $query;
@@ -107,9 +109,6 @@ class ProductService {
             $productsRelated[] = $this->em->getRepository(Product::class)->findOneBy(["id" => $number]);
         }
         dump($productsRelated);
-
-        // $repo = $this->em->getRepository(Product::class);
-        // $query = $repo->createQueryBuilder("product");
 
         return $productsRelated;
     }

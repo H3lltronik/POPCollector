@@ -64,7 +64,8 @@ class AccountController extends AbstractController {
         $user = $em->getRepository(User::class)->findOneBy(["id" => $id]);
         $userLogged = $security->getUser();
         $page = $request->query->get('page', 1);
-        $private = false;
+        $private = true;
+        $suspended = false;
         $subscribed = false;
 
         $repo = $em->getRepository(Product::class);
@@ -76,7 +77,11 @@ class AccountController extends AbstractController {
 
         if (isset($user))
         if (in_array("ROLE_SELLER", $user->getRoles()) || in_array("ROLE_ADMIN", $userLogged->getRoles())) {
-            $private = true;
+            $private = false;
+        }
+
+        if (!$user->getIsActive()) {
+            $suspended = true;
         }
 
         $roles = ($userLogged)? $userLogged->getRoles():[];
@@ -88,7 +93,8 @@ class AccountController extends AbstractController {
         }
 
         return $this->render("account/details.html.twig", [
-            "user" => $private? $user:null,
+            "user" => (!$private)? $user:null,
+            "suspended" => $suspended,
             "pagination" => $pagination,
             "isBuyer" => in_array("ROLE_BUYER", $roles),
             "subscribed" => $subscribed
@@ -109,5 +115,26 @@ class AccountController extends AbstractController {
         $em->flush();
 
         return $this->json(["status" => "ok"], 200);
+    }
+
+    /**
+     * @Route("/account-delete/id/", name="account_delete")
+     */
+    public function deleteAccount(Security $security, EntityManagerInterface $em, Request $request) {
+        $account = $request->query->get('account', 0);
+        $message = "El usuario ha sido deshabilitado";
+
+        $user = $em->getRepository(User::class)->findOneBy(["id" => $account]);
+        if (!$user->getIsActive()) {
+            $user->setIsActive(true);
+            $message = "El usuario ha sido habilitado";
+        }
+        else
+            $user->setIsActive(false);
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->json(["status" => "ok", "message" => $message], 200);
     }
 }

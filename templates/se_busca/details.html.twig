@@ -21,7 +21,9 @@
             </div>
         </div>
         <div class="col-12 col-lg-7">
-            <div class="product_page_title">{{busqueda.title}} <small class="product_page_small text-muted">(Creado {{busqueda.createdAt|date("Y-m-d")}})</small></div>
+            <div class="product_page_title">{{busqueda.title}} </div>
+            <div><small class="product_page_small text-muted">(Publicado en {{busqueda.createdAt|date("Y-m-d")}} por 
+                <a href="{{path("account_id", {id: busqueda.publisher.id})}}">{{busqueda.publisher.personalization.name}}</a> )</small></div>
             <div class="product_page_description mt-lg-4">{{busqueda.description}}</div>
 
             {% if app.user.id|default(null) == busqueda.publisherId and busqueda.isActive %}

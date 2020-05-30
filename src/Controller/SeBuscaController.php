@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Product;
 use DateTime;
 use DateTimeZone;
+use App\Entity\Product;
 use App\Entity\SeBusca;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,8 @@ class SeBuscaController extends AbstractController {
     public function list( Request $request, PaginatorInterface $paginator) {
         $page = $request->query->get('page', 1);
         $query = $this->em->getRepository(SeBusca::class)->createQueryBuilder("product");
+        $query->innerJoin("App\Entity\User", "publisher", Join::WITH, "publisher = product.publisher");
+        $query->andWhere("publisher.isActive = 1");
         $query->orderBy('product.created_at', 'ASC');
 
         $pagination = $paginator->paginate($query, $page, 16);

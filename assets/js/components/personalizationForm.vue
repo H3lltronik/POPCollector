@@ -129,6 +129,11 @@ export default {
     },
     methods: {
         sendForm () {
+            this.$notify({
+                title: "Espere",
+                type: "info",
+                message: "Guardando informacion"
+            })
             let formData = new FormData ();
             formData.set("name", this.form.name)
             formData.set("father", this.form.father)

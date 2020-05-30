@@ -3,7 +3,24 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    {% if user is not null %}
+    {% if app.user.isAdmin %}
+        <h2 class="mt-2">Admin options</h2>
+        <div class="row mb-5 mt-4 justify-content-around">
+            <div class="col-6 col-lg-3">
+                <button id="delete" type="button" class="btn btn-primary mb-2" style="text-transform: capitalize;">{{suspended? "":"Des"}}habilitar cuenta</button>
+            </div>
+            {% if suspended == false %}
+                <div class="col-6 col-lg-3">
+                    <button id="edit" type="button" class="btn btn-primary mb-2">Editar cuenta</button>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if suspended == false %}
+            {{render_personalization (user, true, true, false)}}            
+        {% endif %}
+    {% endif %}
+    {% if user is not null and suspended == false %}
         <div class="row" id="vue">
             <div class="col-12 col-lg-6">
                 <div class="row align-items-baseline">
@@ -94,23 +111,10 @@
             {% endif %}
             
         </div>
+    {% elseif suspended %}
+        <div style="width: 100%; height: 100%;" class="d-flex justify-content-center align-items-center"><h3>Esta cuenta esta desactivada</h3></div>
     {% else %}
-        <div style="width: 80vw; height: 70vh;" class="d-flex justify-content-center align-items-center"><h3>Esta cuenta es privada :c</h3></div>
-    {% endif %}
-
-    {% if app.user.isAdmin %}
-        <h2 class="mt-5">Admin options!</h2>
-        <div class="row mt-4 justify-content-around">
-            <div class="col-6 col-lg-3">
-                <button id="delete" type="button" class="btn btn-primary mb-2">Deshabilitar cuenta</button>
-            </div>
-            <div class="col-6 col-lg-3">
-                <button id="edit" type="button" class="btn btn-primary mb-2">Editar cuenta</button>
-            </div>
-        </div>
-
-        
-        {{render_personalization (user, true, true, false)}}
+        <div style="width: 100%; height: 100%;" class="d-flex justify-content-center align-items-center"><h3>Esta cuenta es privada :c</h3></div>
     {% endif %}
     
 {% endblock %}
@@ -121,6 +125,11 @@
             el: "#vue",
         })
         $("#suscribe").click(() => {
+            vueProd.$notify({
+                title: "En proceso",
+                type: "info",
+                message: "Suscribiendose..."
+            })
             $.post("{{path('subscribe_id', {account: user.id|default(0)})}}").then(res => {
                 $("#submit").prop("disabled", false);
                 vueProd.$notify({
@@ -140,12 +149,16 @@
 
         {% if app.user.isAdmin %}
         $("#delete").click(() => {
-            $.post("{{path('subscribe_id', {account: user.id|default(0)})}}").then(res => {
-                $("#submit").prop("disabled", false);
+            vueProd.$notify({
+                title: "En proceso",
+                type: "info",
+                message: "Realizando acciones..."
+            })
+            $.post("{{path('account_delete', {account: user.id|default(0)})}}").then(res => {
                 vueProd.$notify({
                     title: "Exito",
                     type: "success",
-                    message: "El usuario ha sido deshabilitado"
+                    message: res.message
                 })
                 window.location.reload()
             }).catch(err => {
