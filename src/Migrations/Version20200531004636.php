@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200529004230 extends AbstractMigration
+final class Version20200531004636 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -35,9 +35,9 @@ final class Version20200529004230 extends AbstractMigration
         $this->addSql('CREATE TABLE se_busca_product (se_busca_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_1C5D7593F3426271 (se_busca_id), INDEX IDX_1C5D75934584665A (product_id), PRIMARY KEY(se_busca_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE shipping_address (id INT AUTO_INCREMENT NOT NULL, state_id INT NOT NULL, personalization_id INT DEFAULT NULL, postal_code INT NOT NULL, address VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, phone VARCHAR(255) NOT NULL, INDEX IDX_EB0669455D83CC1 (state_id), UNIQUE INDEX UNIQ_EB0669459BC31F71 (personalization_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE state (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE subscription (id INT AUTO_INCREMENT NOT NULL, following_id INT DEFAULT NULL, INDEX IDX_A3C664D31816E3A3 (following_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE ticket (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, seller_id INT DEFAULT NULL, created_at DATETIME NOT NULL, INDEX IDX_97A0ADA3A76ED395 (user_id), INDEX IDX_97A0ADA38DE820D9 (seller_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_active TINYINT(1) DEFAULT \'1\' NOT NULL, last_login DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user_user (user_source INT NOT NULL, user_target INT NOT NULL, INDEX IDX_F7129A803AD8644E (user_source), INDEX IDX_F7129A80233D34C1 (user_target), PRIMARY KEY(user_source, user_target)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE verifications (id INT AUTO_INCREMENT NOT NULL, product_id INT DEFAULT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_8C86E7464584665A (product_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE wish_list (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_5B8739BDA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE wish_list_product (wish_list_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_9B7C1C9DD69F3311 (wish_list_id), INDEX IDX_9B7C1C9D4584665A (product_id), PRIMARY KEY(wish_list_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -59,9 +59,10 @@ final class Version20200529004230 extends AbstractMigration
         $this->addSql('ALTER TABLE se_busca_product ADD CONSTRAINT FK_1C5D75934584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE shipping_address ADD CONSTRAINT FK_EB0669455D83CC1 FOREIGN KEY (state_id) REFERENCES state (id)');
         $this->addSql('ALTER TABLE shipping_address ADD CONSTRAINT FK_EB0669459BC31F71 FOREIGN KEY (personalization_id) REFERENCES personalization (id)');
-        $this->addSql('ALTER TABLE subscription ADD CONSTRAINT FK_A3C664D31816E3A3 FOREIGN KEY (following_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA38DE820D9 FOREIGN KEY (seller_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE user_user ADD CONSTRAINT FK_F7129A803AD8644E FOREIGN KEY (user_source) REFERENCES user (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE user_user ADD CONSTRAINT FK_F7129A80233D34C1 FOREIGN KEY (user_target) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE verifications ADD CONSTRAINT FK_8C86E7464584665A FOREIGN KEY (product_id) REFERENCES product (id)');
         $this->addSql('ALTER TABLE wish_list ADD CONSTRAINT FK_5B8739BDA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE wish_list_product ADD CONSTRAINT FK_9B7C1C9DD69F3311 FOREIGN KEY (wish_list_id) REFERENCES wish_list (id) ON DELETE CASCADE');
@@ -92,9 +93,10 @@ final class Version20200529004230 extends AbstractMigration
         $this->addSql('ALTER TABLE product DROP FOREIGN KEY FK_D34A04AD40C86FCE');
         $this->addSql('ALTER TABLE reset_password_request DROP FOREIGN KEY FK_7CE748AA76ED395');
         $this->addSql('ALTER TABLE se_busca DROP FOREIGN KEY FK_FE6A5B5A40C86FCE');
-        $this->addSql('ALTER TABLE subscription DROP FOREIGN KEY FK_A3C664D31816E3A3');
         $this->addSql('ALTER TABLE ticket DROP FOREIGN KEY FK_97A0ADA3A76ED395');
         $this->addSql('ALTER TABLE ticket DROP FOREIGN KEY FK_97A0ADA38DE820D9');
+        $this->addSql('ALTER TABLE user_user DROP FOREIGN KEY FK_F7129A803AD8644E');
+        $this->addSql('ALTER TABLE user_user DROP FOREIGN KEY FK_F7129A80233D34C1');
         $this->addSql('ALTER TABLE wish_list DROP FOREIGN KEY FK_5B8739BDA76ED395');
         $this->addSql('ALTER TABLE product DROP FOREIGN KEY FK_D34A04ADD69F3311');
         $this->addSql('ALTER TABLE wish_list_product DROP FOREIGN KEY FK_9B7C1C9DD69F3311');
@@ -111,9 +113,9 @@ final class Version20200529004230 extends AbstractMigration
         $this->addSql('DROP TABLE se_busca_product');
         $this->addSql('DROP TABLE shipping_address');
         $this->addSql('DROP TABLE state');
-        $this->addSql('DROP TABLE subscription');
         $this->addSql('DROP TABLE ticket');
         $this->addSql('DROP TABLE user');
+        $this->addSql('DROP TABLE user_user');
         $this->addSql('DROP TABLE verifications');
         $this->addSql('DROP TABLE wish_list');
         $this->addSql('DROP TABLE wish_list_product');
