@@ -38,7 +38,7 @@ class ContactController extends AbstractController
 
         $email = (new TemplatedEmail())
         ->from('no-reply@popcollector.com')
-        ->to('esau.egs1@gmail.com')
+        ->to('marcoorns@gmail.com')
         ->subject('Has recibido un nuevo correo de contacto')
         ->htmlTemplate('contact/mail.html.twig')
         ->context([

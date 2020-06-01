@@ -25,9 +25,15 @@
             <div class="product_page_title mt-5 mt-lg-0 d-flex align-items-center">{{product.title}}
                 {% if product.verified is not null %}
                     {% if product.verified %}
-                        <el-button class="ml-3" disabled icon="el-icon-check" type="success" circle icon></el-button>
+                        <div class="c-tooltip_container">
+                            <el-icon class="el-icon-check product_verification-status_success"></el-icon>
+                            <span class="c-tooltip">Aprobado</span>
+                        </div>
                     {% else %}
-                        <el-button class="ml-3" disabled icon="el-icon-close" type="danger" circle icon></el-button>
+                        <div class="c-tooltip_container">
+                            <el-icon class="el-icon-close product_verification-status_failure"></el-icon>
+                            <span class="c-tooltip">No aprobado</span>
+                        </div>
                     {% endif %}
                 {% endif %}
             </div>
@@ -42,7 +48,7 @@
                         <form action="{{path('cart_add')}}">
                             <div class="row">
                                 <div class="col-7">
-                                    <div class="row"><input id="quantity" name="quantity" type="number" class="form-control" placeholder="Cantidad"/></div>
+                                    <div class="row"><input id="quantity" name="quantity" min="0" max="100" type="number" class="form-control" placeholder="Cantidad"/></div>
                                 </div>
                                 <div class="col-5"><button id="submit" type="button" class="btn btn-primary mb-2">Comprar</button></div>
                             </div>
@@ -119,6 +125,22 @@
 
 {% block javascripts %}
     <script>
+
+    $(document).ready(() => {
+        // Select your input element.
+        var numInput = document.querySelector('#quantity');
+
+        // Listen for input event on numInput.
+        numInput.addEventListener('input', function(){
+            // Let's match only digits.
+            var num = this.value.match(/^\d+$/);
+            if (num === null) {
+                // If we have no match, value will be empty.
+                this.value = "";
+            }
+        }, false)
+    })
+
         let vueProd = new Vue({
             el: "#prod",
         })

@@ -105,6 +105,7 @@ class ProductController extends AbstractController {
      */
     public function categories (EntityManagerInterface $em) {
         $categories = $em->getRepository(ProductType::class)->findAll();
+        
 
         return $this->render('product/bridge.html.twig', [
             "categories" => $categories

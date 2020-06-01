@@ -54,8 +54,8 @@
                 </el-form-item>
             </div>
         </div>
-        <el-form-item label="Descripcion">
-            <el-input type="textarea" v-model="form.description" placeholder="Descripcion" :rows="6"></el-input>
+        <el-form-item label="Codigo de barras/ISBN">
+            <el-input type="textarea" v-model="form.description" placeholder="Codigo de barras/ISBN" :rows="6"></el-input>
         </el-form-item>
 
         <el-form-item label="Imagenes">

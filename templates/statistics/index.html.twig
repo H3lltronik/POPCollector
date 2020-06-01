@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StatisticsController!{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div  class="col-sm-6 text-center">
+            <label class="label label-success">Productos mas vendidos</label>
+            <div id="bar-chart" ></div>
+        </div>
+
+        <div  class="col-sm-6 text-center">
+            <label class="label label-success">Productos con mayores ingresos</label>
+            <div id="bar-chart2" ></div>
+        </div>
+
+        <div  class="col-sm-6 text-center">
+            <label class="label label-success">Productos con mayor numero de clicks</label>
+            <div id="bar-chart3" ></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script>
+        var data = [
+                {% for product in ventas %}
+                    { y: "{{product[0].title}}", a: {{product.amout}}},
+                {% endfor %}
+            ],
+            config = {
+            data: data,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Total vendidos', 'Total Outcome'],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['gray','red']
+        };
+        config.element = 'bar-chart';
+        config.stacked = true;
+        Morris.Bar(config);
+
+        var data2 = [
+                {% for product in ventas %}
+                    { y: "{{product[0].title}}", a: {{product.total}}},
+                {% endfor %}
+            ],
+            config = {
+            data: data2,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Total ingreso', 'Total Outcome'],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['gray','red']
+        };
+        config.element = 'bar-chart2';
+        config.stacked = true;
+        Morris.Bar(config);
+
+        var data3 = [
+                {% for product in app.user.products %}
+                    { y: "{{product.title}}", a: {{product.clicks}}},
+                {% endfor %}
+            ],
+            config = {
+            data: data3,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Clicks', 'Total Outcome'],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['gray','red']
+        };
+        config.element = 'bar-chart3';
+        config.stacked = true;
+        Morris.Bar(config);
+    </script>
+{% endblock %}
