@@ -1,22 +1,29 @@
 <div class="toolbar">
-    <div class="container px-0">
+    <div class="px-0">
         
         <toolbar-component 
-        user="{{ (user)? app.user|serialize : null}}" mainmenuopts="{{mainMenuOpts|serialize}}" login="{{path("app_login")}}" logo="{{ asset('images/magiarecord_logo-chido.png') }}"
+        user="{{ (user)? app.user|serialize : null}}" mainmenuopts="{{mainMenuOpts|serialize}}" login="{{path("app_login")}}" logo="{{ asset('images/POPCollector.png') }}"
         currentcategory="{{currentcategory|default(null)}}" cartprop="{{cart|serialize}}">
         </toolbar-component>
 
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">            
+            <search-component></search-component>            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <a class="nav-link" href="{{path('home')}}"><li>Inicio</li></a>
+                    {% for category in categories %}
+                        <a class="nav-link" href="{{path('product_all', {category: category.name})}} "><li>{{category.name}}</li></a>
+                    {% endfor %}
+                    <a class="nav-link" href="{{path('se_busca_list')}}"><li>Se busca</li></a>
+                    <a class="nav-link" href="{{path('contact')}}"><li>Contacto</li></a>
+                </ul>
+            </div>
+            
+        </nav>        
         {# <search-component></search-component> #}
 
-        <div class="toolbar_submenu_container mx-0">
-            <ul class="toolbar_submenu">
-                <a href="{{path('home')}}"><li>Inicio</li></a>
-                {% for category in categories %}
-                    <a href="{{path('product_all', {category: category.name})}} "><li>{{category.name}}</li></a>
-                {% endfor %}
-                <a href="{{path('se_busca_list')}}"><li>Se busca</li></a>
-                <a href="{{path('contact')}}"><li>Contacto</li></a>
-            </ul>
-        </div>
     </div>
 </div>

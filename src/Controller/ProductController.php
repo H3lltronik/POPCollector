@@ -50,11 +50,11 @@ class ProductController extends AbstractController {
             "productType" => $productType
         ];
 
-        $bookGenres = ["Terror", "Thriller", "Drama"];
-        $movieGenres = ["Terror", "Thriller", "Drama"];
-        $seriesGenres = ["Terror", "Thriller", "Drama"];
-        $cdsGenres = ["Pop", "Rock", "Metal", "Monas chinas"];
-        $vinylGenres = ["Pop", "Rock", "Metal", "Monas chinas"];
+        $bookGenres = ["Acción", "Fantasía", "Thriller", "Infantil", "Juvenil", "Clásico", "Distopia", "Romance"];
+        $movieGenres = ["Acción", "Fantasía", "Thriller", "Policiaca", "Juvenil", "Infantil", "Drama", "Romance"];
+        $seriesGenres = ["Acción", "Fantasía", "Thriller", "Policiaca", "Juvenil", "Infantil", "Drama", "Romance"];
+        $cdsGenres = ["Pop", "Rock", "Indie", "Ranchero/Norteño", "Instrumental", "Clásica", "Alternativo", "Soundtrack/BSO"];
+        $vinylGenres = ["Pop", "Rock", "Indie", "Ranchero/Norteño", "Instrumental", "Clásica", "Alternativo", "Soundtrack/BSO"];
 
         switch ($productType->getName()) {
             case "Libros": {
@@ -104,8 +104,7 @@ class ProductController extends AbstractController {
      * @Route("/create/categories", name="_create_categories")
      */
     public function categories (EntityManagerInterface $em) {
-        $categories = $em->getRepository(ProductType::class)->findAll();
-        
+        $categories = $em->getRepository(ProductType::class)->findAll();        
 
         return $this->render('product/bridge.html.twig', [
             "categories" => $categories

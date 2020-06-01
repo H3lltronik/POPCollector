@@ -1,5 +1,7 @@
 body {
-	background-color: gainsboro;
+	//background-color: gainsboro;
+	background-color: white;
+	font-family: 'Tw Cen MT'
 }
 
 .toolbar {
@@ -14,8 +16,9 @@ body {
 	}
 
 	&_logo {
+		width: 150px;
 		@include media-breakpoint-down(md) {
-			display: none;
+
 		}
 	}
 

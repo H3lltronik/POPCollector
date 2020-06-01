@@ -10,39 +10,53 @@
             </div>
         {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Registro</h1>
-        <label for="inputEmail">Email</label>
-        <input type="email" value="" name="email" id="inputEmail" class="form-control" required autofocus>
-        <label for="inputPassword">Contraseña</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" required>
-        <label for="inputPassword">Confirmar contraseña</label>
-        <input type="password" name="password2" id="inputPassword2" class="form-control" required>
-
-        <div><label >Tipo de cuenta</label></div>
-        <div class="form-check">
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="accountType" value="buyer">Comprador
-            </label>
-            </div>
-            <div class="form-check">
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="accountType" value="seller">Vendedor
-            </label>
+        <div class="container text-center">
+			<h2 class ="mt-4"> Regístrate ahora </h2>
         </div>
+        <div class="container" style="width: 90%">
+            <div class="row mt-2">
+                <label for="inputEmail">Correo Electrónico</label>
+                <input type="email" placeholder="Correo electrónico" value="" name="email" id="inputEmail" class="form-control" required autofocus>
+            </div>
+            <div class="row mt-2">
+                <label for="inputPassword">Contraseña</label>
+                <input type="password" placeholder="Contraseña" name="password" id="inputPassword" class="form-control" required>
+            </div>
+            <div class="row mt-2">
+                <label for="inputPassword">Confirmar contraseña</label>
+                <input type="password" placeholder="Confirmar contraseña" name="password2" id="inputPassword2" class="form-control" required>
+            </div>
+            
+            <div class="row mt-2">
+                <label for="checkType">Tipo de cuenta</label>
+            </div>
+            <div class="row">
+                <div class="form-check mr-1" id="checkType">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="accountType" value="buyer">Comprador
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="accountType" value="seller">Vendedor
+                    </label>
+                </div>
+            </div>            
 
-        <input type="hidden" name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}"
-        >
+            <input type="hidden" name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+            >
 
-        <div class="d-flex mt-lg-4">
-            <button id="crearCuenta" class="btn btn-sm btn-primary" type="submit">
-                Crear cuenta
-            </button>
-            <a href="{{ path('app_login') }}">
-                <button class="btn btn-sm btn-info" type="button">
-                    Iniciar sesion
+            <div class="d-flex mt-4 justify-content-center">
+                <button id="crearCuenta" class="btn btn-sm btn-primary mr-1" type="submit">
+                    Crear cuenta
                 </button>
-            </a>
+                <a href="{{ path('app_login') }}">
+                    <button class="btn btn-sm btn-info mr-1" type="button">
+                        Iniciar sesion
+                    </button>
+                </a>
+            </div>
         </div>
     </el-form>
 {% endblock %}

@@ -1,37 +1,34 @@
 <template>
     <el-form ref="form" :model="form" :loading="loading">
-        <!-- {{form.format}} -->
-        <div class="row">
-            <div class="col-12 col-lg-6">
+        <!-- {{form.format}} -->        
+        <div class="row mr-3">
+            <div class="col-md-6 pr-5">
                 <el-form-item :label="namelabel">
                     <el-input v-model="form.title" :placeholder="namelabel"></el-input>
                 </el-form-item>
             </div>
-            <div class="col-12 col-lg-6">
+            <div class="col-md-6 pr-5">
                 <el-form-item :label="authorlabel">
                     <el-input v-model="form.author" :placeholder="authorlabel"></el-input>
                 </el-form-item>
             </div>
-            <div class="col-12 col-lg-6">
+        </div>
+        <div class="row mr-3">
+            <div class="col-md-6 pr-5">
                 <el-form-item :label="distribuitorlabel">
                     <el-input v-model="form.distribuitor" :placeholder="distribuitorlabel"></el-input>
                 </el-form-item>
             </div>
-            <div class="col-12 col-lg-6">
+            <div class="col-md-6 pr-5">
                 <el-form-item label="Año">
                     <el-input v-model="form.year" placeholder="Año"></el-input>
                 </el-form-item>
             </div>
-            <div class="col-12 col-lg-3">
-                <el-form-item label="Formato">
-                    <el-select v-model="form.format" placeholder="Formato">
-                        <el-option :label="format._name" :value="format.id" v-for="(format, index) in formats" :key="index"></el-option>
-                    </el-select>
-                </el-form-item>
-            </div>
-            <div class="col-12 col-lg-3">
-                <el-form-item label="Cantidad">
-                    <el-input v-model="form.stock" type="number" placeholder="Cantidad"></el-input>
+        </div>
+        <div class="row mr-3">
+            <div class="col-md-6 pr-5">
+                <el-form-item label="Descripcion">
+                    <el-input v-model="form.description" placeholder="Descripcion"></el-input>
                 </el-form-item>
             </div>
             <div class="col-12 col-lg-6">
@@ -41,12 +38,26 @@
                     </el-checkbox-group>
                 </el-form-item>
             </div>
-            <div class="col-12 col-lg-6">
-                <el-form-item label="Precio">
-                    <el-input v-model="form.price" type="Precio" placeholder="Precio"></el-input>
-                </el-form-item>
+        </div>
+
+        <div class="row mr-3">     
+            <div class="col-md-6 pr-5">     
+                <div class="row">  
+                    <div class="col-md-6 pr-5">
+                        <el-form-item label="Formato">
+                            <el-select v-model="form.format" placeholder="Formato">
+                                <el-option :label="format._name" :value="format.id" v-for="(format, index) in formats" :key="index"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                    <div class="col-md-6 mt-auto">
+                        <el-form-item label="Cantidad">
+                            <el-input v-model="form.stock" type="number" placeholder="Cantidad"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-lg-3">
+            <div class="col-md-6 pr-5">
                 <el-form-item label="Edicion">
                     <el-select v-model="form.edition" placeholder="Edicion">
                         <el-option :label="edition._name" :value="edition.id" v-for="(edition, index) in editions" :key="index"></el-option>
@@ -58,17 +69,27 @@
             <el-input type="textarea" v-model="form.description" placeholder="Codigo de barras/ISBN" :rows="6"></el-input>
         </el-form-item>
 
+        <div class="row mr-3">
+            <div class="col-12 col-lg-6">
+                <el-form-item label="Precio">
+                    <el-input v-model="form.price" type="Precio" placeholder="Precio"></el-input>
+                </el-form-item>
+            </div>            
+        </div>
+        
         <el-form-item label="Imagenes">
         </el-form-item>
         <el-upload :auto-upload="false" :action="uploadEndpoint" ref="upload" list-type="picture-card" accept="image/*" :multiple="true"
         :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :limit="6" :on-exceed="handleExceed" :on-success="handleSuccess">
             <i class="el-icon-plus"></i>
         </el-upload>
-
-        <el-form-item class="mt-lg-3">
-            <el-button type="primary" @click="uploadImages">{{ (entityprop)? "Edit":"Create" }}</el-button>
-            <el-button>Cancel</el-button>
-        </el-form-item>
+                
+        <div class="row mr-3 justify-content-center mt-auto">
+            <el-form-item class="mt-lg-3">
+                <el-button type="primary" @click="uploadImages">{{ (entityprop)? "Edit":"Create" }}</el-button>
+                <el-button>Cancel</el-button>
+            </el-form-item>
+        </div>
     </el-form>
 </template>
 
