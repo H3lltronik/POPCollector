@@ -6,8 +6,7 @@
 <div class="row" id="prod">
     {% if product != null %}
         <div class="col-12 col-lg-5">
-            <!-- Slider main container -->
-            <div class="w-100 text-center">Publicado por: <a href="{{path("account_id", {id: product.publisher.id})}}">{{product.publisher.personalization.name}}</a></div>
+            <!-- Slider main container -->            
             <div class="swiper-container main-carousel h-100">
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
@@ -25,15 +24,20 @@
             <div class="product_page_title mt-5 mt-lg-0 d-flex align-items-center">{{product.title}}
                 {% if product.verified is not null %}
                     {% if product.verified %}
-                        <el-button class="ml-3" disabled icon="el-icon-check" type="success" circle icon></el-button>
+                        <el-tooltip class="item" effect="dark" content="Este producto está verificado" placement="top-start">
+                            <el-button class="ml-3" disabled icon="el-icon-check" type="success" circle icon></el-button>
+                        </el-tooltip>
                     {% else %}
-                        <el-button class="ml-3" disabled icon="el-icon-close" type="danger" circle icon></el-button>
+                        <el-tooltip class="item" effect="dark" content="Este producto no ha sido verificado" placement="top-start">
+                            <el-button class="ml-3" disabled icon="el-icon-close" type="danger" circle icon></el-button>
+                        </el-tooltip>
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="product_page_distribuitor">- {{product.distribuitor}} <small class="text-muted">({{product.year}})</small></div>
-            <div class="product_page_author">- {{product.author}}</div>
-            <div class="product_page_year">- ${{product.price}} <small class="text-muted">({{product.stock}} disponibles)</small></div>
+            <div class="w-100 mb-2"> <small class="text-muted"> Vendedor: <a href="{{path("account_id", {id: product.publisher.id})}}">{{product.publisher.personalization.name}}</a></small></div>
+            <div class="product_page_year">Distribuidor: {{product.distribuitor}} </div>
+            <div class="product_page_year">Director: {{product.author}} <small class="text-muted">({{product.year}})</small> </div>
+            <div class="product_page_year">Precio: ${{product.price}} <small class="text-muted">({{product.stock}} disponibles)</small></div>
             <div class="product_page_description mt-4 mt-lg-4">{{product.description}}</div>
 
             {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null and verificator != true %}
@@ -88,7 +92,7 @@
         {% if app.user.id|default(null) == product.publisher.id %}
             <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
                 <div class="row">
-                    <span class="product_page_title">Comentarios de verificador <small class="text-muted product_page_year">(solo tu puedes ver esto)</small></span>
+                    <span class="product_page_title">Comentarios de verificador <small class="text-muted product_page_year">(Sólo tu puedes ver esto)</small></span>
                 </div>
 
                 <div class="product_page_description mt-4 mt-lg-4">{{product.verificationComments}}</div>

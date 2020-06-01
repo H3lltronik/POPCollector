@@ -1,10 +1,10 @@
 <template>
     <nav class="toolbar_container row mx-0 align-items-center navbar-dark bg-dark">
-        <div class="toolbar_logo h-100 ml-4 mr-4"><img class="h-100 img-fluid" :src="logo" alt=""></div>    
+        <div class="toolbar_logo h-100 ml-4 mr-4"><a href="/"><img class="img-fluid" :src="logo" alt=""></a></div>    
         <div class="flex-grow-1"></div>
 
         <div class="d-flex">
-            <el-link :underline="false" class="mr-lg-3" primary :href="login" v-if="!user"><i class="el-icon-sell el-icon--left"></i>Login</el-link>
+            <el-link :underline="false" class="mr-3" primary :href="login" v-if="!user"><i class="el-icon-sell el-icon--left"></i>Login</el-link>
             <div class="d-flex" v-else>
                 <div class="d-flex align-items-center">
                     <el-dropdown type="primary" class="normal-button" trigger="hover">
@@ -49,7 +49,7 @@ export default {
             default: () => {return []},
         },
         logo: {
-            default: "images/magiarecord_logo-chido.png"
+            default: "images/POPCollector.png"
         },
         currentcategory: {
             default: null

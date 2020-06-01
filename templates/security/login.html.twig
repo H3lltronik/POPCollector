@@ -14,36 +14,46 @@
             </div>
         {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Iniciar sesion</h1>
-        <label for="inputEmail">Email</label>
-        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
-        <label for="inputPassword">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" required>
+        <div class = "container text-center">
+            <h2 class="mt-4">Inicia sesión con tu cuenta</h2>
+        </div>
+        
+        <div class="container text-center">
+            <div class="mt-5" >
+                <label for="inputEmail">Correo Electrónico</label>
+                <input type="email" placeholder="Correo electrónico" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+                <label for="inputPassword">Contraseña</label>
+                <input type="password" placeholder="Contraseña" name="password" id="inputPassword" class="form-control" required>
 
-        <input type="hidden" name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}"
-        >
+                <input type="hidden" name="_csrf_token"
+                    value="{{ csrf_token('authenticate') }}"
+                >
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
+                {#
+                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                    See https://symfony.com/doc/current/security/remember_me.html
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" name="_remember_me"> Remember me
+                        </label>
+                    </div>
+                #}
+
+                <button class="btn btn-primary btn-lg bg-dark mt-3" type="submit">
+                    Iniciar sesión
+                </button>
+
+                <div class="row justify-content-center mt-2">
+                    <button id="crearCuenta" class="btn btn-secondary btn-lg" type="button">
+                        Regístrate aquí
+                    </button>
+                </div>
+                <div class="row justify-content-center mt-2">
+                    <a id="recuperarCuenta" style="color: blue; text-decoration: underline"> ¿Olvidaste tu contraseña? </a>
+                </div>
             </div>
-        #}
-
-        <button class="btn btn-sm btn-primary" type="submit">
-            Iniciar sesion
-        </button>
-        <button id="crearCuenta" class="btn btn-sm btn-info" type="button">
-            Crear cuenta
-        </button>
-        <button id="recuperarCuenta" class="btn btn-sm btn-info" type="button">
-            Recuperar contraseña
-        </button>
+        </div>
     </form>
 {% endblock %}
 
