@@ -149,7 +149,7 @@ class ProductController extends AbstractController {
 
         if (isset($searchParam)) {
             $query = $em->getRepository(Product::class)
-            ->addfilterByLike($query, "product", ["title", "description"], $searchParam);
+            ->addfilterByLike($query, "product", ["title", "description", "author", "year", "distribuitor", "genero"], $searchParam);
         }
 
         $pagination = $paginator->paginate($query, $page, 16);
