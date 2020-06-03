@@ -44,8 +44,6 @@ class ProductController extends AbstractController {
         $productID = $request->query->get('productID', null);
         $productType = $em->getRepository(ProductType::class)->findOneBy(["id" => $productTypeID]);
 
-        dump($productType);
-
         $params = [
             "productType" => $productType
         ];
@@ -197,6 +195,7 @@ class ProductController extends AbstractController {
         $values['productEdition'] = $request->request->get('edition', null);
 
         if (isset($productID)) {
+            $values["currImages"] = json_decode($request->request->get('currImages', null));
             $productService->editProduct($productID, $values);
         } else {
             $productService->createProduct($values);

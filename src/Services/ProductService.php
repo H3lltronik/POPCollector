@@ -34,6 +34,12 @@ class ProductService {
     public function editProduct($productID, array $values) {
         $product = $this->em->getRepository(Product::class)->findOneBy(["id" => $productID]);
         $product = $this->editBase($product, $values);
+
+        $images = $values['currImages'] ?? [];
+        foreach ($values['images'] as $image) {
+            array_push($images, $image);
+        }
+        $product->setImages($images);
         
         $user = $this->security->getUser();
         $product->setPublisher($user);
@@ -52,7 +58,7 @@ class ProductService {
         $product->setGenero($values['generos']);
         $product->setDescription($values['description']);
         $product->setImages($values['images']);
-        $product->setVerified(false);
+        
         $user = $this->security->getUser();
         $product->setPublisher($user);
 

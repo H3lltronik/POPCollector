@@ -48,7 +48,7 @@
                         <form action="{{path('cart_add')}}">
                             <div class="row">
                                 <div class="col-7">
-                                    <div class="row"><input id="quantity" name="quantity" min="0" max="100" type="number" class="form-control" placeholder="Cantidad"/></div>
+                                    <div class="row"><input id="quantity" name="quantity" min="0" max="{{product.stock}}" type="number" class="form-control" placeholder="Cantidad"/></div>
                                 </div>
                                 <div class="col-5"><button id="submit" type="button" class="btn btn-primary mb-2">Comprar</button></div>
                             </div>
@@ -129,6 +129,7 @@
     $(document).ready(() => {
         // Select your input element.
         var numInput = document.querySelector('#quantity');
+        // console.log("Quantity", numInput)
 
         // Listen for input event on numInput.
         numInput.addEventListener('input', function(){
@@ -144,18 +145,19 @@
         let vueProd = new Vue({
             el: "#prod",
         })
+        
         $("#submit").click(e => {
             let quantity = $("#quantity").val();
             let idProduct = $("#idProduct").val();
 
-            // if (quantity > "{{product.stock}}") {
-            //     vueProd.$notify({
-            //         title: "Stock insuficiente",
-            //         type: "error",
-            //         message: "No hay tantos productos disponibles"
-            //     })
-            //     return;
-            // }
+            if (Number(quantity) > {{product.stock}}) {
+                vueProd.$notify({
+                    title: "Stock insuficiente",
+                    type: "error",
+                    message: "No hay tantos productos disponibles"
+                })
+                return;
+            }
 
             vueProd.$notify({
                 title: "Añadiendo producto",

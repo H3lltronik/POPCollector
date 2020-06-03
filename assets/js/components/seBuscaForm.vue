@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="form" :model="form" :loading="loading">
+        <el-form ref="form" :model="form" v-loading="loading">
             <div class="row">
                 <div class="col-12 col-lg-12">
                     <el-form-item label="Titulo">
