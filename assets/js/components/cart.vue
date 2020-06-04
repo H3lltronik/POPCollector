@@ -66,6 +66,7 @@ export default {
                     type: "success",
                     message: "Completado correctamente",
                 })
+                window.location.reload()
             })
         },
         buyCart () {

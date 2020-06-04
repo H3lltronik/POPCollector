@@ -124,4 +124,51 @@ body {
 			text-align: justify;
 		}
 	}
+
+	&_verification-status {
+		&_success {
+			padding: 5px; 
+			background-color: greenyellow; 
+			border-radius: 100%;
+			margin-left: 1rem;
+			opacity: 0.7;
+		}
+		&_failure {
+			padding: 5px; 
+			background-color: red; 
+			border-radius: 100%;
+			margin-left: 1rem;
+			opacity: 0.7;
+		}
+	}
+}
+
+.c-tooltip {
+	$self: &;
+	visibility: hidden;
+	width: 120px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%) translateY(25%);
+	transition: opacity 0.5s ease-in-out;
+	@include font-poppins-light(12pt, 9pt, white);
+	
+	/* Position the tooltip text - see examples below! */
+	position: absolute;
+	z-index: 1;
+
+	&_container {
+		position: relative;
+		&:hover {
+			#{$self} {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+	}
 }

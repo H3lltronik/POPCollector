@@ -1,16 +1,25 @@
-<el-link :underline="false" href="{{ path("product_details", {id: product.id}) }}">
-    <div class="d-flex flex-column">
-        <div class="product_small_image">
+<a class="w-100" href="{{ path("product_details", {id: product.id}) }}">
+    <div class="d-flex flex-column w-100">
+        <div class="product_small_image w-100">
             <img class="image-cover" src="{{asset('uploads/products/'~ product.images[0].name)}}" alt="">
         </div>
 
-        <div class="product_small_title mt-lg-2">{{product.title}}
+        <div class="product_small_title mt-lg-2 d-flex align-items-center">
+            <span>{{product.title}}</span>
             {% if product.verified is not null %}
                 {% if product.verified %}
-                    <el-button class="ml-3" disabled icon="el-icon-check" size="mini" type="success" circle icon></el-button>
+                    <div class="c-tooltip_container">
+                        <el-icon class="el-icon-check product_verification-status_success"></el-icon>
+                        <span class="c-tooltip">Aprobado</span>
+                    </div>
+                {% else %}
+                    <div class="c-tooltip_container">
+                        <el-icon class="el-icon-close product_verification-status_failure"></el-icon>
+                        <span class="c-tooltip">No aprobado</span>
+                    </div>
                 {% endif %}
             {% endif %}
         </div>
         <div class="product_small_price">${{product.price}}</div>
     </div>
-</el-link>
+</a>

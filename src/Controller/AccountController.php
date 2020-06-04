@@ -18,11 +18,13 @@ class AccountController extends AbstractController {
     /**
      * @Route("/account", name="account")
      */
-    public function index(Security $security, EntityManagerInterface $em, UserService $userService) {
+    public function index(Security $security, EntityManagerInterface $em, UserService $userService, PaginatorInterface $paginator, Request $request) {
         $user = $security->getUser();
         $template = "";
         $params = [];
         $query = null;
+        $page = $request->query->get('page', 1);
+        
 
         if ($userService->hasRole(["ROLE_BUYER"])) {
             $template = "account/index.html.twig";
@@ -30,28 +32,24 @@ class AccountController extends AbstractController {
             $template = "account/seller.html.twig";
             $repo = $em->getRepository(Product::class);
             $query = $repo->createQueryBuilder("product");
-            $query->innerJoin("App\Entity\User", "user", Join::WITH, "product.publisher = user.id");
-            $query->innerJoin("App\Entity\Sale", "sale", Join::WITH, "product.id = sale.product");
-            $query->addSelect("COUNT(sale) as amout");
-            $query->addSelect("SUM(sale.price) as total");
-            $query->groupBy("sale.product");
-            $query->orderBy("amout", "ASC");
-            $query->setMaxResults(6);
-
+            $query->andWhere("product.publisher = :val");
+            $query->setParameter('val', $user->getId());
+            
+            $pagination = $paginator->paginate($query, $page, 16);
+            
+            $params["pagination"] = $pagination;
             $params["products"] = $query->getQuery()->getResult();
         } else if ($userService->hasRole(["ROLE_ADMIN"])) {
             $template = "account/admin.html.twig";
             $repo = $em->getRepository(Product::class);
             $query = $repo->createQueryBuilder("product");
-            $query->innerJoin("App\Entity\User", "user", Join::WITH, "product.publisher = user.id");
-            $query->innerJoin("App\Entity\Sale", "sale", Join::WITH, "product.id = sale.product");
-            $query->addSelect("COUNT(sale) as amout");
-            $query->addSelect("SUM(sale.price) as total");
-            $query->groupBy("sale.product");
-            $query->orderBy("amout", "ASC");
-            $query->setMaxResults(6);
+            $query->andWhere("product.publisher = :val");
+            $query->setParameter('val', $user->getId());
+
+            $pagination = $paginator->paginate($query, $page, 16);
 
             $params["products"] = $query->getQuery()->getResult();
+            $params["pagination"] = $pagination;
         }
 
         return $this->render($template, $params);

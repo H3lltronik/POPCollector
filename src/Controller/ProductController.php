@@ -44,8 +44,6 @@ class ProductController extends AbstractController {
         $productID = $request->query->get('productID', null);
         $productType = $em->getRepository(ProductType::class)->findOneBy(["id" => $productTypeID]);
 
-        dump($productType);
-
         $params = [
             "productType" => $productType
         ];
@@ -151,7 +149,7 @@ class ProductController extends AbstractController {
 
         if (isset($searchParam)) {
             $query = $em->getRepository(Product::class)
-            ->addfilterByLike($query, "product", ["title", "description"], $searchParam);
+            ->addfilterByLike($query, "product", ["title", "description", "author", "year", "distribuitor", "genero"], $searchParam);
         }
 
         $pagination = $paginator->paginate($query, $page, 16);
@@ -197,6 +195,7 @@ class ProductController extends AbstractController {
         $values['productEdition'] = $request->request->get('edition', null);
 
         if (isset($productID)) {
+            $values["currImages"] = json_decode($request->request->get('currImages', null));
             $productService->editProduct($productID, $values);
         } else {
             $productService->createProduct($values);

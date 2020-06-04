@@ -22,8 +22,8 @@ export default {
     data () {
         return {
             paypalCredentials: {
-                sandbox: "ATNn6cgvTRJq6nqJLV50CE-fsVD-BZFlielc-d2kU9LFGiwAeHP6jq34y8T85anG5nOIXgDUQ91DYXzk",
-                production: "ATNn6cgvTRJq6nqJLV50CE-fsVD-BZFlielc-d2kU9LFGiwAeHP6jq34y8T85anG5nOIXgDUQ91DYXzk",
+                sandbox: "AU7cr3IdrX9ivZpZHP2bT3BkuZy0LE5VIj2zj30in7gmDDdq0MhvxDx9kyFZGmNDIyHzXwh6l_4LlTlK",
+                production: "AU7cr3IdrX9ivZpZHP2bT3BkuZy0LE5VIj2zj30in7gmDDdq0MhvxDx9kyFZGmNDIyHzXwh6l_4LlTlK",
             },
             showPaypal: true,
         }

@@ -1,6 +1,6 @@
 <template>
     <el-dialog :title="header" :visible.sync="dialog" :close-on-click-modal="canClose" :show-close="canClose">
-        <el-form ref="form" :model="form" :loading="loading">
+        <el-form ref="form" :model="form" v-loading="loading">
             <div class="row">
                 <div class="col-12 col-lg-6">
                     <el-form-item label="Nombre">

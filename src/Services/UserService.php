@@ -80,7 +80,7 @@ class UserService {
                 "text" => "Publicar producto",
             ],
             [
-                "href" => "/",
+                "href" => "/statistics",
                 "text" => "Estadisticas",
             ]);
         } 
