@@ -75,7 +75,7 @@ class AppBFixtures extends Fixture {
         $manager->persist($productFormatB);
 
         $productFormat = new ProductFormat ();
-        $productFormat->setName("Blue-ray + DVD");
+        $productFormat->setName("Blu-ray + DVD");
         $productFormat->addProductType($productTypeP);
         $productFormat->addProductType($productTypeS);
         $manager->persist($productFormat);
@@ -93,13 +93,13 @@ class AppBFixtures extends Fixture {
         $manager->persist($productEdition);
 
         $productEdition = new ProductEdition ();
-        $productEdition->setName("Coleccion");
+        $productEdition->setName("Colección");
         $productEdition->addProductType($productTypeP);
         $productEdition->addProductType($productTypeS);
         $manager->persist($productEdition);
 
         $productEdition = new ProductEdition ();
-        $productEdition->setName("Carton");
+        $productEdition->setName("Cartón");
         $productEdition->addProductType($productTypeC);
         $productEdition->addProductType($productTypeV);
         $manager->persist($productEdition);

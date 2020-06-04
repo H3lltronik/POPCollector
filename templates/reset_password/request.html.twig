@@ -11,7 +11,7 @@
     </div>
 
     {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
+        {{ form_row(requestForm.email, { 'attr': { 'class': 'form-control' } }) }}
         <div>
             <small>
                 Ingresa tu correo y te enviaremos un correo para restaurar tu contraseña.

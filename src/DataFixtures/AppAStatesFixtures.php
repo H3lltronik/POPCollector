@@ -21,10 +21,6 @@ class AppAStatesFixtures extends Fixture {
         $manager->persist($state);
 
         $state = new State();
-        $state->setName("Zacatecas");
-        $manager->persist($state);
-
-        $state = new State();
         $state->setName("Campeche");
         $manager->persist($state);
 
@@ -130,6 +126,10 @@ class AppAStatesFixtures extends Fixture {
 
         $state = new State();
         $state->setName("Veracruz");
+        $manager->persist($state);
+
+        $state = new State();
+        $state->setName("Zacatecas");
         $manager->persist($state);
 
         // $state = new State();
