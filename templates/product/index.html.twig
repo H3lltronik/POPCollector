@@ -42,7 +42,7 @@
             <div class="product_page_year">Precio: ${{product.price}} <small class="text-muted">({{product.stock}} disponibles)</small></div>
             <div class="product_page_description mt-4 mt-lg-4">{{product.description}}</div>
 
-            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null and verificator != true %}
+            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null and verificator != true or app.user.isAdmin %}
                 <div class="row justify-content-around mt-4 mt-lg-3">
                     <div class="col-6 col-lg-3">
                         <form action="{{path('cart_add')}}">
@@ -60,7 +60,8 @@
                         <button id="verification" type="button" class="btn btn-warning mb-2">Solicitar Verificacion</button>
                     {% endif %}
                 </div>
-            {% elseif app.user.id|default(null) == product.publisher.id %}
+            {% endif %}
+            {% if app.user.id|default(null) == product.publisher.id or app.user.isAdmin %}
                 <div class="row justify-content-around mt-lg-3">
                     <div class="col-6 col-lg-3">
                         <form method="GET" action="{{path('product_create')}}">
@@ -73,7 +74,7 @@
             {% endif %}
         </div>
 
-        {% if verificator %}
+        {% if verificator or app.user.isAdmin %}
             <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
                 <div class="row">
                     <span class="product_page_title">Verificar</span>
@@ -91,7 +92,7 @@
             </div>
         {% endif %}
 
-        {% if app.user.id|default(null) == product.publisher.id and product.verified != null %}
+        {% if app.user.id|default(null) == product.publisher.id and (product.verified != null or app.user.isAdmin) %}
             <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
                 <div class="row">
                     <span class="product_page_title">Comentarios de verificador <small class="text-muted product_page_year">(Sólo tu puedes ver esto)</small></span>
@@ -208,6 +209,7 @@
                     type: "success",
                     message: "Todo correcto"
                 })
+                window.location.reload()
             }).catch(err => {
                 console.log("err", err);
                 let message = "Ocurrio un error";
@@ -231,16 +233,25 @@
             let verComments = $("#ver-comments").val();
             let id = "{{product.verifications.id|default(0)}}"
             $.post("{{path("product_verificate")}}", {approved, verComments, id}).then((res) => {
-                console.log("res", res);
-                vueProd.$notify({
-                    title: "Verificacion publicada",
-                    type: "success",
-                    message: "Todo correcto"
-                })
-                window.location.reload()
+                console.log("res", res)
+                if (res.status == 200 || res.status == "ok") {
+                    vueProd.$notify({
+                        title: "Verificacion publicada",
+                        type: "success",
+                        message: "Todo correcto"
+                    })
+                    window.location.reload()
+                } else {
+                    vueProd.$notify({
+                        title: "Ocurrio un error",
+                        type: "info",
+                        message: "Ocurrio un error extraño"
+                    })
+                }
+                
             }).catch(err => {
                 console.log("err", err);
-                let message = "Ocurrio un error";
+                let message = err.responseJSON.message;
                 let type = "error";
                 let title = "Error";
                 vueProd.$notify({

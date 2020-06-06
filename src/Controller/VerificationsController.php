@@ -32,17 +32,22 @@ class VerificationsController extends AbstractController
         $id = $request->request->get('id', null);
         $comments = $request->request->get('verComments', null);
         $approved = $request->request->get('approved', null);
-
+        dump("Ola");
         $verification = $em->getRepository(Verifications::class)->findOneBy(["id" => $id]);
         dump($verification);
+        dump($id);
+        if (!isset($verification)) {
+            return $this->json(["status" => "error", "message" => "Este producto no ha sido solicitado para ser verificado"], 406);
+        }
         $product = $verification->getProduct();
         $product->setVerificationComments($comments);
         $product->setVerified($approved);
-
+        dump("Adio");
         $em->persist($product);
         $em->flush();
         $em->remove($verification);
         $em->flush();
+        dump("XD");
         
         return $this->json(["status" => "ok"], 200);
     }
