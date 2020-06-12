@@ -96,8 +96,8 @@
                 
         <div class="row mr-3 justify-content-center mt-auto">
             <el-form-item class="mt-lg-3">
-                <el-button type="primary" @click="uploadImages">{{ (entityprop)? "Edit":"Create" }}</el-button>
-                <el-button @click="goBack">Cancel</el-button>
+                <el-button type="primary" @click="uploadImages">{{ (entityprop)? "Editar":"Crear" }}</el-button>
+                <el-button @click="goBack">Cancelar</el-button>
             </el-form-item>
         </div>
     </el-form>

@@ -3,29 +3,24 @@
 {% block title %}Categorias{% endblock %}
 
 {% block body %}
-<div class ="row justify-content-center">
+<div class ="row justify-content-center mb-3">
     <h2> Subir Producto </h2>
 </div>
-    <div class="container-fluid">
-        <div class="row d-flex mt-2 mb-5">
-            {% for category in categories %}
-                <div class="col d-flex justify-content-center mt-2">
-                    <el-link :underline="false" href="{{path('product_create', { idType: category.id })}}">                    
-                        <div class="card" style="width: 12rem; height: 20rem;">
-                            <img class="card-img-top" src="{{asset('images/' ~ category.name)}}.jpg" alt="">
-                            <div class="card-body">
-                                <h2 class="card-title"> {{category.name}} </h2>
-                            </div>	
-                        </div>	
-                        
-                        {#<div class="categories_image-container">
-                            <img class="image-cover" src="https://images-na.ssl-images-amazon.com/images/I/71SVE2mEfvL._AC_SL1001_.jpg" alt="">
-                        </div>
-                        <div class="categories_title mt-lg-2"></div>#}                    
-                    </el-link>
-                </div>
-            {% endfor %}
+    
+<div class="row justify-content-center">
+    {% for category in categories %}
+        <div class="justify-content-center col-lg-2 col-md-4 col-sm-6 mb-4">
+            <el-link :underline="false" href="{{path('product_create', { idType: category.id })}}">                    
+                <div class="card" style="width: 12rem; height: 20rem;">
+                    <img class="card-img-top" src="{{asset('images/' ~ category.name)}}.jpg" alt="">
+                    <div class="card-body">
+                        <h2 class="card-title"> {{category.name}} </h2>
+                    </div>	
+                </div>	                                 
+            </el-link>
         </div>
+    {% endfor %}
+</div>    
         
         {# <div class="col-12 col-lg-4 mb-lg-4">
             <el-link :underline="false">
@@ -66,8 +61,7 @@
                 <div class="categories_title mt-lg-2">Peliculas</div>
                 </div>
             </el-link>
-        </div> #}
-    </div>
+        </div> #}    
 {% endblock %}
 
 {% block javascripts %}

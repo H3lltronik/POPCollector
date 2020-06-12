@@ -129,6 +129,10 @@ class AppAStatesFixtures extends Fixture {
         $manager->persist($state);
 
         $state = new State();
+        $state->setName("Yucatán");
+        $manager->persist($state);  
+
+        $state = new State();
         $state->setName("Zacatecas");
         $manager->persist($state);
 
