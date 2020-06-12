@@ -4,7 +4,7 @@
         <div class="flex-grow-1"></div>
 
         <div class="d-flex">
-            <el-link :underline="false" class="mr-3" primary :href="login" v-if="!user"><i class="el-icon-sell el-icon--left"></i>Login</el-link>
+            <el-link :underline="false" class="mr-3" primary :href="login" v-if="!user"><i class="el-icon-sell el-icon--left"></i>Iniciar Sesión</el-link>
             <div class="d-flex" v-else>
                 <div class="d-flex align-items-center">
                     <el-dropdown type="primary" class="normal-button" trigger="hover">

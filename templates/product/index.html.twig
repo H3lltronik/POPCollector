@@ -48,7 +48,7 @@
                         <form action="{{path('cart_add')}}">
                             <div class="row">
                                 <div class="col-7">
-                                    <div class="row"><input id="quantity" name="quantity" min="0" max="{{product.stock}}" type="number" class="form-control" placeholder="Cantidad"/></div>
+                                    <div class="row"><input id="quantity" name="quantity" min="0" max="{{product.stock}}" type="number" class="form-control" placeholder="Cantidad" default="1"/></div>
                                 </div>
                                 <div class="col-5"><button id="submit" type="button" class="btn btn-primary mb-2">Comprar</button></div>
                             </div>

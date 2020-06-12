@@ -27,12 +27,12 @@
         </div>
         <div class="row mr-3">
             <div class="col-md-6 pr-5">
-                <el-form-item label="Codigo de barras/ISBN" prop="description">
-                    <el-input v-model="form.description" placeholder="Descripcion"></el-input>
+                <el-form-item label="Código de barras/ISBN" prop="description">
+                    <el-input v-model="form.description" placeholder="Código de barras/ISBN"></el-input>
                 </el-form-item>
             </div>
             <div class="col-12 col-lg-6">
-                <el-form-item label="Genero" prop="genero">
+                <el-form-item label="Género" prop="genero">
                     <el-checkbox-group v-model="form.genero">
                         <el-checkbox :label="genre" :name="genre" v-for="(genre, index) in genres" :key="index"></el-checkbox>
                     </el-checkbox-group>

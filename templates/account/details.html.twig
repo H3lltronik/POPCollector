@@ -43,22 +43,22 @@
             {% if user|default(false) %}
                 <div class="col-12 col-lg-6">
                     <div class="row align-items-baseline">
-                        <span class="product_page_year mt-3 mr-2"><b>Informacion de {{user.isBuyer? "envio":"establecimiento"}}</b> </span>
+                        <span class="product_page_year mt-3 mr-2"><b>Información de {{user.isBuyer? "envio":"establecimiento"}}</b> </span>
                     </div>
                     <div class="row align-items-baseline">
                         <span class="product_page_description mt-2 mr-2"><b>Estado:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.state.name}}</span>
                     </div>
                     <div class="row align-items-baseline">
-                        <span class="product_page_description mt-2 mr-2"><b>Direccion:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.address}}</span>
+                        <span class="product_page_description mt-2 mr-2"><b>Dirección:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.address}}</span>
                     </div>
                     <div class="row align-items-baseline">
-                        <span class="product_page_description mt-2 mr-2"><b>Codigo postal:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.postalCode}}</span>
+                        <span class="product_page_description mt-2 mr-2"><b>Código postal:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.postalCode}}</span>
                     </div>
                     <div class="row align-items-baseline">
-                        <span class="product_page_description mt-2 mr-2"><b>Descripcion:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.description}}</span>
+                        <span class="product_page_description mt-2 mr-2"><b>Descripción:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.description}}</span>
                     </div>
                     <div class="row align-items-baseline">
-                        <span class="product_page_description mt-2 mr-2"><b>Telefono:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.phone}}</span>
+                        <span class="product_page_description mt-2 mr-2"><b>Teléfono:</b> </span> <span class="product_page_description">{{user.personalization.shippingAddress.phone}}</span>
                     </div>
                 </div>
                 {% if user.isBuyer|default(false) %}

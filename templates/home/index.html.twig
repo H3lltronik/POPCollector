@@ -3,20 +3,20 @@
 {% block title %}POPCollector{% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row justify-content-center">
         <!-- Slider main container -->
         <div class="swiper-container main-carousel">
             <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
                 <!-- Slides -->
                 <div class="swiper-slide home_banner">
-                    <img class="image-cover" src="https://i.picsum.photos/id/590/1920/600.jpg" alt="">
+                    <img class="image-cover" src="{{asset('images/blockbuster')}}.png" alt="">
                 </div>
                 <div class="swiper-slide home_banner">
-                    <img class="image-cover" src="https://i.picsum.photos/id/290/1920/600.jpg" alt="">
+                    <img class="image-cover" src="{{asset('images/bookshop')}}.png" alt="">
                 </div>
                 <div class="swiper-slide home_banner">
-                    <img class="image-cover" src="https://i.picsum.photos/id/190/1920/600.jpg" alt="">
+                    <img class="image-cover" src="{{asset('images/recordstore')}}.png" alt="">
                 </div>
             </div>
             <!-- If we need pagination -->

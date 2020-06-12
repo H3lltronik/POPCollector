@@ -18,18 +18,18 @@
                     </el-form-item>
                 </div>
                 <div class="col-12 col-lg-4">
-                    <el-form-item label="Codigo postal">
-                        <el-input v-model="form.cp" placeholder="Codigo postal" type="number"></el-input>
+                    <el-form-item label="Código postal">
+                        <el-input v-model="form.cp" placeholder="Código postal" type="number"></el-input>
                     </el-form-item>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <el-form-item label="Direccion">
-                        <el-input v-model="form.address" placeholder="Direccion"></el-input>
+                    <el-form-item label="Dirección">
+                        <el-input v-model="form.address" placeholder="Dirección"></el-input>
                     </el-form-item>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <el-form-item label="Descripcion">
-                        <el-input v-model="form.description" placeholder="Descripcion"></el-input>
+                    <el-form-item label="Descripción">
+                        <el-input v-model="form.description" placeholder="Descripción"></el-input>
                     </el-form-item>
                 </div>
                 <div class="col-12 col-lg-6">
@@ -47,7 +47,7 @@
                 <div class="col-12 col-lg-12">
                     <el-form-item class="mt-lg-3">
                         <el-button type="primary" @click="sendForm">Guardar</el-button>
-                        <el-button v-if="canClose" @click="dialog = false">Cancel</el-button>
+                        <el-button v-if="canClose" @click="dialog = false">Cancelar</el-button>
                     </el-form-item>
                 </div>
             </div>
