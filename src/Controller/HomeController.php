@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\State;
 use App\Entity\Personalization;
 use App\Entity\ShippingAddress;
+use App\Services\ProductService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -21,9 +22,10 @@ class HomeController extends AbstractController {
     /**
      * @Route("/", name="")
      */
-    public function index() {
+    public function index(ProductService $productService) {
+        $latestProducts = $productService->getLatestsProducts ();
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'latestProducts' => $latestProducts,
         ]);
     }
 
