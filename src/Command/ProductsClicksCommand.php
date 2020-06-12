@@ -34,6 +34,7 @@ class ProductsClicksCommand extends Command {
             if ($product->getClicks() < 100) {
                 $product->setIsVisible(false);
                 $this->em->persist($product);
+                $output->writeln('Se ha desactivado el producto: ' . $product->getTitle());
             }
         }
 

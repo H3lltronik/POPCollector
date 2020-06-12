@@ -6,9 +6,10 @@ import ProductForm from './components/productForm.vue'
 import SeBuscaForm from './components/seBuscaForm.vue'
 import RecommendForm from './components/recommendForm.vue'
 import PersonalizationForm from './components/personalizationForm.vue'
+import locale from 'element-ui/lib/locale/lang/es'
 import SearchBox from './components/searchBox.vue'
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 window.Vue = Vue;
 

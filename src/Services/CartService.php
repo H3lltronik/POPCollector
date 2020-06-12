@@ -120,6 +120,7 @@ class CartService {
 
             $sale = new Sale ();
             $sale->setProduct($product);
+            $sale->setSeller($product->getPublisher());
             $sale->setTicket($ticket);
             $sale->setCreatedAt(new DateTime("now"));
             $sale->setQuantity($cartProduct["quantity"]);

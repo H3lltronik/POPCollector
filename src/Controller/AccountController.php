@@ -8,10 +8,15 @@ use App\Entity\Subscription;
 use App\Services\UserService;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AccountController extends AbstractController {
@@ -24,9 +29,11 @@ class AccountController extends AbstractController {
         $params = [];
         $query = null;
         $page = $request->query->get('page', 1);
+
+        dump($user->getTickets()->getValues());
         
 
-        if ($userService->hasRole(["ROLE_BUYER"])) {
+        if ($userService->hasRole(["ROLE_BUYER"]) || $userService->hasRole(["ROLE_VERIFICATOR"])) {
             $template = "account/index.html.twig";
         } else if ($userService->hasRole(["ROLE_SELLER"])) {
             $template = "account/seller.html.twig";
@@ -134,5 +141,24 @@ class AccountController extends AbstractController {
         $em->flush();
 
         return $this->json(["status" => "ok", "message" => $message], 200);
+    }
+
+    /**
+     * @Route("/account/check-last-login", name="account_check-last-login")
+     */
+    public function checkLastLogin(KernelInterface $kernel) {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'app:check-last-login',
+        ]);
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+
+        $content = $output->fetch();
+
+        return new Response($content);
     }
 }

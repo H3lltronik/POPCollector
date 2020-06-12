@@ -14,8 +14,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -93,8 +98,6 @@ class ProductController extends AbstractController {
         $params["editions"] = $productType->getProductEditions();
         $params["productID"] = $productID;
         
-        dump($params);
-
         return $this->render('product/form.html.twig', $params);
     }
 
@@ -153,8 +156,6 @@ class ProductController extends AbstractController {
         }
 
         $pagination = $paginator->paginate($query, $page, 16);
-
-        dump($pagination->getItems());
 
         return $this->render('product/list.html.twig', [
             "pagination" => $pagination,
@@ -225,10 +226,22 @@ class ProductController extends AbstractController {
     }
 
     /**
-     * @Route("/product/check-clicks", name="_check-clicks")
+     * @Route("/check-clicks", name="_check-clicks")
      */
-    public function checkProductClicks() {
-        
+    public function checkProductClicks(KernelInterface $kernel) {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'app:check-products-clicks',
+        ]);
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+
+        $content = $output->fetch();
+
+        return new Response($content);
     }
 
     /**

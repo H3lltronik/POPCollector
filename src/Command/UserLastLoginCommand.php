@@ -29,21 +29,21 @@ class UserLastLoginCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln("XD");
-        // $users = $this->em->getRepository(User::class)->findAll();
-        // $todayDate = new \DateTime('now', new DateTimeZone('UTC')); $todayDate->setTime(0,0);
+        $users = $this->em->getRepository(User::class)->findAll();
+        $todayDate = new \DateTime('now', new DateTimeZone('UTC')); $todayDate->setTime(0,0);
 
-        // foreach ($users as $user) {
-        //     $lastLogin = $user->getLastLogin();
-        //     $months = ($lastLogin->diff($todayDate))->months;
+        foreach ($users as $user) {
+            $lastLogin = $user->getLastLogin();
+            $months = ($lastLogin->diff($todayDate))->m;
 
-        //     if ($months >= 6) {
-        //         $user->setIsActive(false);
-        //         $this->em->persist($user);
-        //     }
-        // }
+            if ($months >= 6) {
+                $user->setIsActive(false);
+                $this->em->persist($user);
+                $output->writeln('Se ha desactivado la cuenta con email: ' . $user->getEmail());
+            }
+        }
 
-        // $this->em->flush();
+        $this->em->flush();
 
         return 0;
     }
