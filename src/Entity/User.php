@@ -69,11 +69,6 @@ class User implements UserInterface
     private $personalization;
 
     /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="seller")
-     */
-    private $sales;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $last_login;
@@ -83,15 +78,20 @@ class User implements UserInterface
      */
     private $subscriptions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="seller")
+     */
+    private $sales;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->seBuscas = new ArrayCollection();
-        $this->sales = new ArrayCollection();
         $this->follower = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
+        $this->sales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -313,37 +313,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Ticket[]
-     */
-    public function getSales(): Collection
-    {
-        return $this->sales;
-    }
-
-    public function addSale(Ticket $sale): self
-    {
-        if (!$this->sales->contains($sale)) {
-            $this->sales[] = $sale;
-            $sale->setSeller($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSale(Ticket $sale): self
-    {
-        if ($this->sales->contains($sale)) {
-            $this->sales->removeElement($sale);
-            // set the owning side to null (unless already changed)
-            if ($sale->getSeller() === $this) {
-                $sale->setSeller(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getLastLogin(): ?\DateTimeInterface
     {
         return $this->last_login;
@@ -416,5 +385,36 @@ class User implements UserInterface
             return true;
         else 
             return false;
+    }
+
+    /**
+     * @return Collection|Sale[]
+     */
+    public function getSales(): Collection
+    {
+        return $this->sales;
+    }
+
+    public function addSale(Sale $sale): self
+    {
+        if (!$this->sales->contains($sale)) {
+            $this->sales[] = $sale;
+            $sale->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSale(Sale $sale): self
+    {
+        if ($this->sales->contains($sale)) {
+            $this->sales->removeElement($sale);
+            // set the owning side to null (unless already changed)
+            if ($sale->getSeller() === $this) {
+                $sale->setSeller(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -42,7 +42,7 @@
             <div class="product_page_year">Precio: ${{product.price}} <small class="text-muted">({{product.stock}} disponibles)</small></div>
             <div class="product_page_description mt-4 mt-lg-4">{{product.description}}</div>
 
-            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null and verificator != true or app.user.isAdmin %}
+            {% if app.user.id|default(null) != product.publisher.id and app.user.id|default(null) != null and verificator != true or app.user.isAdmin|default(false) %}
                 <div class="row justify-content-around mt-4 mt-lg-3">
                     <div class="col-6 col-lg-3">
                         <form action="{{path('cart_add')}}">
@@ -61,7 +61,7 @@
                     {% endif %}
                 </div>
             {% endif %}
-            {% if app.user.id|default(null) == product.publisher.id or app.user.isAdmin %}
+            {% if app.user.id|default(null) == product.publisher.id or app.user.isAdmin|default(false) %}
                 <div class="row justify-content-around mt-lg-3">
                     <div class="col-6 col-lg-3">
                         <form method="GET" action="{{path('product_create')}}">
@@ -74,7 +74,7 @@
             {% endif %}
         </div>
 
-        {% if verificator or app.user.isAdmin %}
+        {% if verificator or app.user.isAdmin|default(false) %}
             <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
                 <div class="row">
                     <span class="product_page_title">Verificar</span>
@@ -92,7 +92,7 @@
             </div>
         {% endif %}
 
-        {% if app.user.id|default(null) == product.publisher.id and (product.verified != null or app.user.isAdmin) %}
+        {% if app.user.id|default(null) == product.publisher.id and (product.verified != null or app.user.isAdmin|default(false)) %}
             <div class="col-12 mb-4 mt-5 mt-lg-5 mb-lg-3">
                 <div class="row">
                     <span class="product_page_title">Comentarios de verificador <small class="text-muted product_page_year">(Sólo tu puedes ver esto)</small></span>

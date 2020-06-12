@@ -46,9 +46,7 @@
                 <div class="row align-items-baseline">
                     <div class="col-12"><span class="product_page_description mt-2 mr-2"><b>Venta #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span></div>
                     <div class="ml-3 ml-lg-5 col-12">
-                    {% for sale in ticket.sales %}
-                        <div class="row">{{sale.product.title}} x{{sale.quantity}} = {{sale.price}}</div>        
-                    {% endfor %} 
+                        <div class="row">{{ticket.product.title}} x{{ticket.quantity}} = {{ticket.price}}</div>
                     </div>
                 </div>
             {% endfor %}

@@ -44,6 +44,12 @@ class Sale
      */
     private $ticket;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sales")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $seller;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +111,18 @@ class Sale
     public function setTicket(?Ticket $ticket): self
     {
         $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    public function getSeller(): ?User
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?User $seller): self
+    {
+        $this->seller = $seller;
 
         return $this;
     }
