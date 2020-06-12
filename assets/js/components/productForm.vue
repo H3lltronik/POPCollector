@@ -58,8 +58,8 @@
                 </div>
             </div>
             <div class="col-md-6 pr-5">
-                <el-form-item label="Edicion" prop="edition">
-                    <el-select v-model="form.edition" placeholder="Edicion">
+                <el-form-item label="Edición" prop="edition">
+                    <el-select v-model="form.edition" placeholder="Edición">
                         <el-option :label="edition._name" :value="edition.id" v-for="(edition, index) in editions" :key="index"></el-option>
                     </el-select>
                 </el-form-item>

@@ -57,7 +57,7 @@ class SecurityController extends AbstractController
         ];
         $userService->createUser($values);
 
-        $this->addFlash('newAccount', 'Favor de iniciar sesion con tu nueva cuenta');
+        $this->addFlash('newAccount', 'Favor de iniciar sesión con tu nueva cuenta');
         return JsonResponse::create(['status' => 'ok']);
     }
 }
