@@ -119,6 +119,20 @@ class ProductService {
         return $productsRelated;
     }
 
+    public function getLatestsProducts() {
+        $repo = $this->em->getRepository(Product::class);
+        $query = $repo->createQueryBuilder("product");
+        $query = $repo->addJoinTo($query, 'App\Entity\User', "publisher", "product.publisher");
+        $query->andWhere("publisher.isActive = 1");
+        $query->orderBy('product.id', 'DESC');
+        $query->setMaxResults(16);
+        $products = $query->getQuery()->getResult();
+        
+        dump($products);
+
+        return $products;
+    }
+
     public function addProductToWishlist ($productID) {
         $product = $this->em->getRepository(Product::class)->findOneBy(["id" => $productID]);
         $user = $this->security->getUser();
