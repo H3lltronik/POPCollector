@@ -65,7 +65,7 @@ class ProductController extends AbstractController {
                 $params["distribuitorLabel"] = "Editorial";
                 break;
             }
-            case "Peliculas": {
+            case "Películas": {
                 $params["genres"] = $movieGenres;
                 $params["authorLabel"] = "Director";
                 break;

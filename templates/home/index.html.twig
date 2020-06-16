@@ -25,7 +25,9 @@
         </div>
 
         <div class="col-12">
-            <div>Ultimos Productos</div>
+            <div class="mt-5">
+                <h2>Ultimos Productos</h2>
+            </div>
             <div class="owl-carousel owl-theme">
                 {% for product in latestProducts %}
                     {{render_product(product)}}
