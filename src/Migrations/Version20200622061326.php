@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200612170624 extends AbstractMigration
+final class Version20200622061326 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -30,12 +30,12 @@ final class Version20200612170624 extends AbstractMigration
         $this->addSql('CREATE TABLE product_format_product_type (product_format_id INT NOT NULL, product_type_id INT NOT NULL, INDEX IDX_B831BD76B8894088 (product_format_id), INDEX IDX_B831BD7614959723 (product_type_id), PRIMARY KEY(product_format_id, product_type_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_type (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reset_password_request (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, selector VARCHAR(20) NOT NULL, hashed_token VARCHAR(100) NOT NULL, requested_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', expires_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_7CE748AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE sale (id INT AUTO_INCREMENT NOT NULL, product_id INT NOT NULL, ticket_id INT NOT NULL, seller_id INT DEFAULT NULL, created_at DATETIME NOT NULL, quantity INT NOT NULL, price DOUBLE PRECISION NOT NULL, INDEX IDX_E54BC0054584665A (product_id), INDEX IDX_E54BC005700047D2 (ticket_id), INDEX IDX_E54BC0058DE820D9 (seller_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE sale (id INT AUTO_INCREMENT NOT NULL, product_id INT NOT NULL, seller_id INT DEFAULT NULL, ticket_id INT DEFAULT NULL, created_at DATETIME NOT NULL, quantity INT NOT NULL, price DOUBLE PRECISION NOT NULL, INDEX IDX_E54BC0054584665A (product_id), INDEX IDX_E54BC0058DE820D9 (seller_id), INDEX IDX_E54BC005700047D2 (ticket_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE se_busca (id INT AUTO_INCREMENT NOT NULL, publisher_id INT DEFAULT NULL, created_at DATETIME NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, images JSON NOT NULL, is_active TINYINT(1) NOT NULL, is_visible TINYINT(1) NOT NULL, INDEX IDX_FE6A5B5A40C86FCE (publisher_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE se_busca_product (se_busca_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_1C5D7593F3426271 (se_busca_id), INDEX IDX_1C5D75934584665A (product_id), PRIMARY KEY(se_busca_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE shipping_address (id INT AUTO_INCREMENT NOT NULL, state_id INT NOT NULL, personalization_id INT DEFAULT NULL, postal_code INT NOT NULL, address VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, phone VARCHAR(255) NOT NULL, INDEX IDX_EB0669455D83CC1 (state_id), UNIQUE INDEX UNIQ_EB0669459BC31F71 (personalization_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE state (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE ticket (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, seller_id INT DEFAULT NULL, created_at DATETIME NOT NULL, INDEX IDX_97A0ADA3A76ED395 (user_id), INDEX IDX_97A0ADA38DE820D9 (seller_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE ticket (id INT AUTO_INCREMENT NOT NULL, seller_id INT DEFAULT NULL, buyer_id INT DEFAULT NULL, created_at DATETIME NOT NULL, status VARCHAR(255) DEFAULT NULL, updated_at DATETIME DEFAULT NULL, rastreo VARCHAR(255) DEFAULT NULL, INDEX IDX_97A0ADA38DE820D9 (seller_id), INDEX IDX_97A0ADA36C755722 (buyer_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_active TINYINT(1) DEFAULT \'1\' NOT NULL, last_login DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_user (user_source INT NOT NULL, user_target INT NOT NULL, INDEX IDX_F7129A803AD8644E (user_source), INDEX IDX_F7129A80233D34C1 (user_target), PRIMARY KEY(user_source, user_target)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE verifications (id INT AUTO_INCREMENT NOT NULL, product_id INT DEFAULT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_8C86E7464584665A (product_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -53,15 +53,15 @@ final class Version20200612170624 extends AbstractMigration
         $this->addSql('ALTER TABLE product_format_product_type ADD CONSTRAINT FK_B831BD7614959723 FOREIGN KEY (product_type_id) REFERENCES product_type (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE reset_password_request ADD CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE sale ADD CONSTRAINT FK_E54BC0054584665A FOREIGN KEY (product_id) REFERENCES product (id)');
-        $this->addSql('ALTER TABLE sale ADD CONSTRAINT FK_E54BC005700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket (id)');
         $this->addSql('ALTER TABLE sale ADD CONSTRAINT FK_E54BC0058DE820D9 FOREIGN KEY (seller_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE sale ADD CONSTRAINT FK_E54BC005700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket (id)');
         $this->addSql('ALTER TABLE se_busca ADD CONSTRAINT FK_FE6A5B5A40C86FCE FOREIGN KEY (publisher_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE se_busca_product ADD CONSTRAINT FK_1C5D7593F3426271 FOREIGN KEY (se_busca_id) REFERENCES se_busca (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE se_busca_product ADD CONSTRAINT FK_1C5D75934584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE shipping_address ADD CONSTRAINT FK_EB0669455D83CC1 FOREIGN KEY (state_id) REFERENCES state (id)');
         $this->addSql('ALTER TABLE shipping_address ADD CONSTRAINT FK_EB0669459BC31F71 FOREIGN KEY (personalization_id) REFERENCES personalization (id)');
-        $this->addSql('ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA38DE820D9 FOREIGN KEY (seller_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA36C755722 FOREIGN KEY (buyer_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE user_user ADD CONSTRAINT FK_F7129A803AD8644E FOREIGN KEY (user_source) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE user_user ADD CONSTRAINT FK_F7129A80233D34C1 FOREIGN KEY (user_target) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE verifications ADD CONSTRAINT FK_8C86E7464584665A FOREIGN KEY (product_id) REFERENCES product (id)');
@@ -95,8 +95,8 @@ final class Version20200612170624 extends AbstractMigration
         $this->addSql('ALTER TABLE reset_password_request DROP FOREIGN KEY FK_7CE748AA76ED395');
         $this->addSql('ALTER TABLE sale DROP FOREIGN KEY FK_E54BC0058DE820D9');
         $this->addSql('ALTER TABLE se_busca DROP FOREIGN KEY FK_FE6A5B5A40C86FCE');
-        $this->addSql('ALTER TABLE ticket DROP FOREIGN KEY FK_97A0ADA3A76ED395');
         $this->addSql('ALTER TABLE ticket DROP FOREIGN KEY FK_97A0ADA38DE820D9');
+        $this->addSql('ALTER TABLE ticket DROP FOREIGN KEY FK_97A0ADA36C755722');
         $this->addSql('ALTER TABLE user_user DROP FOREIGN KEY FK_F7129A803AD8644E');
         $this->addSql('ALTER TABLE user_user DROP FOREIGN KEY FK_F7129A80233D34C1');
         $this->addSql('ALTER TABLE wish_list DROP FOREIGN KEY FK_5B8739BDA76ED395');

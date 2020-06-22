@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport"
+        <meta name="view    port"
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="icon" href="{{asset("images/logo.png")}}">
@@ -27,8 +27,16 @@
                         {% block body %}{% endblock %}
                     </div>
                 </el-main>
-                <el-footer>
-                    {% block footer %}{% endblock %}
+                <el-footer class="navbar navbar-default navbar-static-bottom navbar-fixed-bottom text-white bg-dark">                       
+                        <p> 2018 © POPCollector.</p>	
+                        <a href="#"> 
+                            <small>Términos y Condiciones </small>
+                        </a>		                                                
+                        <a href="#"> 
+                            <small>Política de privacidad </small>
+                        </a>
+                                   
+                    {% block footer %}{% endblock %}                    
                 </el-footer>
             </el-container>
         </div>

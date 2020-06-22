@@ -132,7 +132,7 @@ export default {
             this.$notify({
                 title: "Espere",
                 type: "info",
-                message: "Guardando informacion"
+                message: "Guardando información"
             })
             let formData = new FormData ();
             formData.set("name", this.form.name)

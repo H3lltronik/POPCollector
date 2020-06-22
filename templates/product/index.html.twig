@@ -57,7 +57,7 @@
                     </div>
                     <button id="wishlist" type="button" class="btn btn-info mb-2">Añadir a Wishlist</button>
                     {% if product.verified != true %}
-                        <button id="verification" type="button" class="btn btn-warning mb-2">Solicitar Verificacion</button>
+                        <button id="verification" type="button" class="btn btn-warning mb-2">Solicitar Verificación</button>
                     {% endif %}
                 </div>
             {% endif %}
@@ -205,7 +205,7 @@
             $.post("{{path("product_verification", {idProduct: product.id})}}").then((res) => {
                 console.log("res", res);
                 vueProd.$notify({
-                    title: "Verificacion solicitada",
+                    title: "Verificación solicitada",
                     type: "success",
                     message: "Todo correcto"
                 })
@@ -216,9 +216,9 @@
                 let type = "error";
                 let title = "Error";
                 if (err.status == 409) {
-                    message = "Alguien ya ha solicitado la verificacion de este producto"
+                    message = "Alguien ya ha solicitado la verificación de este producto"
                     type = "info"
-                    title = "Verificacion solicitada"
+                    title = "Verificación solicitada"
                 }
                 vueProd.$notify({
                     title,
@@ -236,7 +236,7 @@
                 console.log("res", res)
                 if (res.status == 200 || res.status == "ok") {
                     vueProd.$notify({
-                        title: "Verificacion publicada",
+                        title: "Verificación publicada",
                         type: "success",
                         message: "Todo correcto"
                     })

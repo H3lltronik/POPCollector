@@ -61,9 +61,9 @@ class FrontExtension extends AbstractExtension {
             $noPersonalization = ($user->getPersonalization() == null);
 
             if (in_array("ROLE_BUYER", $user->getRoles())) {
-                $header = "Direccion de envio";
+                $header = "Dirección de envío";
             } else if (in_array("ROLE_SELLER", $user->getRoles())) {
-                $header = "Direccion de establecimiento";
+                $header = "Dirección de establecimiento";
                 $isseller = true;
             }
         }

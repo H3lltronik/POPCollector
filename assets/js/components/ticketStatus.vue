@@ -1,10 +1,10 @@
 <template>
-    <el-dialog title="Informacion del ticket" :visible.sync="dialog">
+    <el-dialog title="información del ticket" :visible.sync="dialog">
         <el-form ref="form" :model="form" v-loading="loading">
             <div class="row">
                 <div class='col-12 col-lg-12'>
-                    <div>Informacion del cliente</div>
-                    <div>Direccion: {{form.buyer.personalization.shipping_address.address}}</div>
+                    <div>información del cliente</div>
+                    <div>Dirección: {{form.buyer.personalization.shipping_address.address}}</div>
                     <div>Codigo Postal: {{form.buyer.personalization.shipping_address.postal_code}}</div>
                     <div>Estado: {{form.buyer.personalization.shipping_address.state._name}}</div>
                     <div>Telefono: {{form.buyer.personalization.shipping_address.phone}}</div>
@@ -68,7 +68,7 @@ export default {
             this.$notify({
                 type: "info",
                 title: "Cargando ticket",
-                message: "Cargando informacion del ticket"
+                message: "Cargando información del ticket"
             })
             let formData = new FormData();
             formData.set("idTicket", idTicket)
@@ -90,7 +90,7 @@ export default {
             this.$notify({
                 title: "Espere",
                 type: "info",
-                message: "Guardando informacion"
+                message: "Guardando información"
             })
             let formData = new FormData ();
             formData.set("idTicket", this.form.id)
@@ -102,7 +102,7 @@ export default {
                 this.$notify({
                     type: "success",
                     title: "Datos guardados",
-                    message: "La informacion del ticket fue guardada"
+                    message: "La información del ticket fue guardada"
                 })
                 window.location.reload ();
             }).catch(err => {
