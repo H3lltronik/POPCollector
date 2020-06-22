@@ -39,16 +39,15 @@ class Sale
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ticket::class, inversedBy="sales")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $ticket;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sales")
      * @ORM\JoinColumn(nullable=true)
      */
     private $seller;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Ticket::class, inversedBy="sales")
+     */
+    private $ticket;
 
     public function getId(): ?int
     {
@@ -103,18 +102,6 @@ class Sale
         return $this;
     }
 
-    public function getTicket(): ?Ticket
-    {
-        return $this->ticket;
-    }
-
-    public function setTicket(?Ticket $ticket): self
-    {
-        $this->ticket = $ticket;
-
-        return $this;
-    }
-
     public function getSeller(): ?User
     {
         return $this->seller;
@@ -123,6 +110,18 @@ class Sale
     public function setSeller(?User $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getTicket(): ?Ticket
+    {
+        return $this->ticket;
+    }
+
+    public function setTicket(?Ticket $ticket): self
+    {
+        $this->ticket = $ticket;
 
         return $this;
     }

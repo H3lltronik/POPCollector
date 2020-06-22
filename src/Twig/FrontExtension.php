@@ -40,8 +40,7 @@ class FrontExtension extends AbstractExtension {
         $categories = $this->em->getRepository(ProductType::class)->findAll();
 
         $cart = $this->cartService->getCartData ();
-        dump($currentCategory);
-
+        
         $params = [
             "mainMenuOpts" => $opts,
             "user" => $user ?? null,
@@ -49,7 +48,8 @@ class FrontExtension extends AbstractExtension {
             "cart" => $cart,
             "currentCategory" => $currentCategory,
         ];
-
+        
+        
         return $this->templating->render('common/toolbar.html.twig', $params);
     }
 

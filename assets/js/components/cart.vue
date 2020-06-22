@@ -16,8 +16,8 @@
             </el-table>
 
             <div class="w-100 d-flex justify-content-center" v-if="cart.length > 0">
-                <!-- <el-button class="mx-auto" primary @click="buyCart">Realizar compra</el-button> -->
-                <paypal-button :items="cart"></paypal-button>
+                <el-button class="mx-auto" primary @click="buyCart">Realizar compra</el-button>
+                <!-- <paypal-button :items="cart"></paypal-button> -->
             </div>
         </el-dialog>  
     </div>

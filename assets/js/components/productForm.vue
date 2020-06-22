@@ -224,7 +224,14 @@ export default {
           }
       },
       uploadImages () {
-          this.sendForm("form");
+          if (this.form.files.length < 3) {
+              this.$notify({
+                  type: "warning",
+                  title: "Minimo 3 imagenes",
+                  message: "Elija minimo 3 imagenes del producto"
+              })
+          } else 
+            this.sendForm("form");
       },
       sendForm (formName) {
           this.$refs[formName].validate((valid) => {

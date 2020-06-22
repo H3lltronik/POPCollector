@@ -93,6 +93,7 @@ class CartService {
     public function buyCart () {
         $cart = [];
         $user = $this->security->getUser();
+        $auxSeller = null;
 
         if ($this->session->get('cart')) {
             $cart = $this->session->get('cart');
@@ -101,18 +102,26 @@ class CartService {
         if (sizeof($cart) <= 0)
             return;
 
-        $ticket = new Ticket ();
-        $ticket->setCreatedAt(new DateTime("now"));
-        $ticket->setUser($user);
-
         foreach ($cart as $cartProduct) {
             $product = $this->em->getRepository(Product::class)->findOneBy(["id" => $cartProduct['idProduct']]);
             $stock = $product->getStock();
             $stock -= $cartProduct["quantity"];
-
+            
             if ($stock < 0) {
                 throw "Not enough stock!";
             }
+            $seller = $product->getPublisher();
+            if ($auxSeller != $seller) {
+                $auxSeller = $seller;
+                // Crear un ticket por vendedor por venta
+                $ticket = new Ticket ();
+                $ticket->setCreatedAt(new DateTime("now"));
+                $ticket->setUpdatedAt(new DateTime("now"));
+                $ticket->setBuyer($user);
+                $ticket->setSeller($auxSeller);
+                $ticket->setStatus("Proceso");
+            }
+            
 
             $total = $cartProduct["quantity"] * $product->getPrice();
 
@@ -120,11 +129,13 @@ class CartService {
 
             $sale = new Sale ();
             $sale->setProduct($product);
-            $sale->setSeller($product->getPublisher());
+            $sale->setSeller($seller);
             $sale->setTicket($ticket);
             $sale->setCreatedAt(new DateTime("now"));
             $sale->setQuantity($cartProduct["quantity"]);
             $sale->setPrice($total);
+
+            $ticket->addSale($sale);
 
             $this->em->persist($product);
             $this->em->persist($sale);

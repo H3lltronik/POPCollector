@@ -7,6 +7,7 @@
         <div class="col-12 col-lg-6 ">
             <div class="row align-items-baseline">
                 <span class="product_page_year mt-3 mr-2"><b>Detalles de la cuenta</b> </span>
+                <button id="edit" type="button" class="btn btn-primary ml-2 rounded-circle btn btn-sm"><i class="el-icon-edit"></i></button>
             </div>
             <div class="row align-items-baseline">
                 <span class="product_page_description mt-2 mr-2"><b>Nombre:</b> </span> <span class="product_page_description">{{app.user.personalization.name}}</span>
@@ -38,15 +39,30 @@
                 <span class="product_page_description mt-2 mr-2"><b>Telefono:</b> </span> <span class="product_page_description">{{app.user.personalization.shippingAddress.phone}}</span>
             </div>
         </div>
-        <div class="col-12 col-lg-6" style="max-height: 600px; overflow-y: auto; overflow-x: hidden;">
+        <div class="col-12 col-lg-6" style="max-height: 600px; overflow-y: auto; overflow-x: hidden;" >
             <div class="row align-items-baseline">
                 <span class="product_page_year mt-3 mr-2"><b>Historial de ventas</b> </span>
             </div>
-            {% for ticket in app.user.sales %}
+            {% for ticket in app.user.salesTicket %}
                 <div class="row align-items-baseline">
-                    <div class="col-12"><span class="product_page_description mt-2 mr-2"><b>Venta #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span></div>
+                    <div class="col-12">
+                        <span class="product_page_description mt-2 mr-2"><b>Venta #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span>
+                        <span class="ml-2">
+                            <el-tooltip class="item" effect="dark" content="Informacion del envio" placement="top-start">
+                                <button type="button" class="ticketInfo btn btn-primary ml-2 rounded-circle btn btn-sm" data-ticket="{{ticket.id|default(0)}}">
+                                    <i class="el-icon-info"></i>
+                                </button>
+                            </el-tooltip>
+                        </span>
+                        <span class="ml-2 text-muted"><small>Status: {{ticket.status}}</small></span>
+                        {% if ticket.rastreo %}
+                            <div class="ml-2 text-muted"><small>Numero de rastreo: {{ticket.rastreo}}</small></div>
+                        {% endif %}
+                    </div>
                     <div class="ml-3 ml-lg-5 col-12">
-                        <div class="row">{{ticket.product.title}} x{{ticket.quantity}} = {{ticket.price}}</div>
+                    {% for sale in ticket.sales %}
+                        <div class="row">{{sale.product.title}} x{{sale.quantity}} = {{sale.price}}</div>        
+                    {% endfor %}
                     </div>
                 </div>
             {% endfor %}
@@ -67,10 +83,20 @@
             </div>
             {{ knp_pagination_render(pagination) }}
         </div>
-
     </div>
+    {{render_personalization (app.user, true, true, false)}}
+    <ticket-status-component></ticket-status-component>
 {% endblock %}
 
 {% block javascripts %}
-
+<script>
+    $("#edit").click(() => {
+        openPersonalizationForm ();
+    })
+    $(".ticketInfo").click(function () {
+        let ticket = $(this).attr("data-ticket");
+        console.log("Ticket id", ticket)
+        openTicketStatus (ticket);
+    })
+</script>
 {% endblock %}

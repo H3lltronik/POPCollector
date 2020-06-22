@@ -124,6 +124,7 @@ class ProductService {
         $query = $repo->createQueryBuilder("product");
         $query = $repo->addJoinTo($query, 'App\Entity\User', "publisher", "product.publisher");
         $query->andWhere("publisher.isActive = 1");
+        $query->andWhere("product.isVisible = 1");
         $query->orderBy('product.id', 'DESC');
         $query->setMaxResults(16);
         $products = $query->getQuery()->getResult();
