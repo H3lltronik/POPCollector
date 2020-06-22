@@ -1,5 +1,5 @@
 {% if pageCount > 1 %}
-    <nav>
+    <nav class ="mt-4">
         {% set classAlign = (align is not defined) ? '' : align=='center' ? ' justify-content-center' : (align=='right' ? ' justify-content-end' : '') %}
         {% set classSize = (size is not defined) ? '' : size=='large' ? ' pagination-lg' : (size=='small' ? ' pagination-sm' : '') %}
 
@@ -31,7 +31,7 @@
 
             <!-- PAGINACION -->
             <div class="row d-flex">
-                <span class="mr-1">Paginas: </span>
+                <!-- <span class="mr-1"> </span> -->
                 {% if startPage > 1 %}
                 <span class="pagination_item">
                     <a class="" href="{{ path(route, query|merge({(pageParameterName): 1})) }}">1</a>
@@ -52,7 +52,7 @@
                     <span class="pagination_item">
                         <a class="" href="{{ path(route, query|merge({(pageParameterName): page})) }}">
                             {% if page != 1 and page != startPage %}
-                                ,
+                                -
                             {% endif %}
                              {{ page }}
                         </a>
@@ -61,7 +61,7 @@
                     <span class="pagination_selected active">
                         <span class="">
                             {% if page != 1 %}
-                            ,
+                            -
                             {% endif %}
                             {{ page }}
                         </span>
