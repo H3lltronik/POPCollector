@@ -30,9 +30,6 @@ class AccountController extends AbstractController {
         $query = null;
         $page = $request->query->get('page', 1);
 
-        dump($user->getTickets()->getValues());
-        
-
         if ($userService->hasRole(["ROLE_BUYER"]) || $userService->hasRole(["ROLE_VERIFICATOR"])) {
             $template = "account/index.html.twig";
         } else if ($userService->hasRole(["ROLE_SELLER"])) {

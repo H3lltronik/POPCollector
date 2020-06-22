@@ -45,9 +45,15 @@
             <div class="row align-items-baseline">
                 <span class="product_page_year mt-3 mr-2"><b>Historial de compras</b> </span>
             </div>
-            {% for ticket in app.user.tickets %}
+            {% for ticket in app.user.purchasesTicket %}
                 <div class="row align-items-baseline">
-                    <div class="col-12"><span class="product_page_description mt-2 mr-2"><b>Compra #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span></div>
+                    <div class="col-12"><span class="product_page_description mt-2 mr-2">
+                        <b>Compra #{{loop.index}}</b></span> <span class="product_page_small">({{ticket.createdAt|date("Y-m-d")}})</span>
+                        <span class="ml-2 text-muted"><small>Status: {{ticket.status}}</small></span>
+                        {% if ticket.rastreo %}
+                            <div class="ml-2 text-muted"><small>Numero de rastreo: {{ticket.rastreo}}</small></div>
+                        {% endif %}
+                    </div>
                     <div class="ml-3 ml-lg-5 col-12">
                     {% for sale in ticket.sales %}
                         <div class="row">{{sale.product.title}} x{{sale.quantity}} = {{sale.price}}</div>        

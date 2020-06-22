@@ -30,15 +30,29 @@ class Ticket
     private $sales;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tickets")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $user;
+    private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sales")
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updated_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="salesTicket")
      */
     private $seller;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="purchasesTicket")
+     */
+    private $buyer;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $rastreo;
 
     public function __construct()
     {
@@ -93,14 +107,26 @@ class Ticket
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getStatus(): ?string
     {
-        return $this->user;
+        return $this->status;
     }
 
-    public function setUser(?User $user): self
+    public function setStatus(?string $status): self
     {
-        $this->user = $user;
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }
@@ -113,6 +139,30 @@ class Ticket
     public function setSeller(?User $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getBuyer(): ?User
+    {
+        return $this->buyer;
+    }
+
+    public function setBuyer(?User $buyer): self
+    {
+        $this->buyer = $buyer;
+
+        return $this;
+    }
+
+    public function getRastreo(): ?string
+    {
+        return $this->rastreo;
+    }
+
+    public function setRastreo(?string $rastreo): self
+    {
+        $this->rastreo = $rastreo;
 
         return $this;
     }

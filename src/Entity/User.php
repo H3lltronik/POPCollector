@@ -39,11 +39,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="user")
-     */
-    private $tickets;
-
-    /**
      * @ORM\OneToOne(targetEntity=WishList::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $wishList;
@@ -83,15 +78,26 @@ class User implements UserInterface
      */
     private $sales;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="seller")
+     */
+    private $salesTicket;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="buyer")
+     */
+    private $purchasesTicket;
+
     public function __construct()
     {
-        $this->tickets = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->seBuscas = new ArrayCollection();
         $this->follower = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
         $this->sales = new ArrayCollection();
+        $this->salesTicket = new ArrayCollection();
+        $this->purchasesTicket = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,37 +176,6 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * @return Collection|Ticket[]
-     */
-    public function getTickets(): Collection
-    {
-        return $this->tickets;
-    }
-
-    public function addTicket(Ticket $ticket): self
-    {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets[] = $ticket;
-            $ticket->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTicket(Ticket $ticket): self
-    {
-        if ($this->tickets->contains($ticket)) {
-            $this->tickets->removeElement($ticket);
-            // set the owning side to null (unless already changed)
-            if ($ticket->getUser() === $this) {
-                $ticket->setUser(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getWishList(): ?WishList
@@ -412,6 +387,68 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($sale->getSeller() === $this) {
                 $sale->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getSalesTicket(): Collection
+    {
+        return $this->salesTicket;
+    }
+
+    public function addSalesTicket(Ticket $salesTicket): self
+    {
+        if (!$this->salesTicket->contains($salesTicket)) {
+            $this->salesTicket[] = $salesTicket;
+            $salesTicket->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSalesTicket(Ticket $salesTicket): self
+    {
+        if ($this->salesTicket->contains($salesTicket)) {
+            $this->salesTicket->removeElement($salesTicket);
+            // set the owning side to null (unless already changed)
+            if ($salesTicket->getSeller() === $this) {
+                $salesTicket->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getPurchasesTicket(): Collection
+    {
+        return $this->purchasesTicket;
+    }
+
+    public function addPurchasesTicket(Ticket $purchasesTicket): self
+    {
+        if (!$this->purchasesTicket->contains($purchasesTicket)) {
+            $this->purchasesTicket[] = $purchasesTicket;
+            $purchasesTicket->setBuyer($this);
+        }
+
+        return $this;
+    }
+
+    public function removePurchasesTicket(Ticket $purchasesTicket): self
+    {
+        if ($this->purchasesTicket->contains($purchasesTicket)) {
+            $this->purchasesTicket->removeElement($purchasesTicket);
+            // set the owning side to null (unless already changed)
+            if ($purchasesTicket->getBuyer() === $this) {
+                $purchasesTicket->setBuyer(null);
             }
         }
 

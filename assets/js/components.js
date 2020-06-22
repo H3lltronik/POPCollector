@@ -6,6 +6,7 @@ import ProductForm from './components/productForm.vue'
 import SeBuscaForm from './components/seBuscaForm.vue'
 import RecommendForm from './components/recommendForm.vue'
 import PersonalizationForm from './components/personalizationForm.vue'
+import TicketStatus from './components/ticketStatus.vue'
 import locale from 'element-ui/lib/locale/lang/es'
 import SearchBox from './components/searchBox.vue'
 
@@ -22,6 +23,7 @@ new Vue ({
         'recommend-form-component': RecommendForm,
         'personalization-form-component': PersonalizationForm,
         'search-component': SearchBox,
+        'ticket-status-component': TicketStatus,
     },
     created() {
     }
