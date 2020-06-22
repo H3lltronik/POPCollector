@@ -1,0 +1,114 @@
+{% if pageCount > 1 %}
+    <nav>
+        {% set classAlign = (align is not defined) ? '' : align=='center' ? ' justify-content-center' : (align=='right' ? ' justify-content-end' : '') %}
+        {% set classSize = (size is not defined) ? '' : size=='large' ? ' pagination-lg' : (size=='small' ? ' pagination-sm' : '') %}
+
+        <div class="row d-flex align-items-center justify-content-between">
+
+            {% if previous is defined %}
+                <span class="">
+                    <a href="{{ path(route, query|merge({(pageParameterName): previous})) }}">
+                        <div class="d-flex product_navigation align-items-center">
+                            <div class="mr-2"><i class="fas fa-caret-left fa-lg"></i></div>
+                            <span>Anterior</span>
+                        </div>
+                    </a>
+                </span>
+
+                <!-- <span class="">
+                    <a class="" rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}">&laquo;&nbsp;{{ 'label_previous'|trans({}, 'KnpPaginatorBundle') }}</a>
+                </span> -->
+            {% else %}
+                <span style="opacity: 0.4">
+                    <a>
+                        <div class="d-flex product_navigation align-items-center">
+                            <div class="mr-2"><i class="fas fa-caret-left fa-lg"></i></div>
+                            <span>Anterior</span>
+                        </div>
+                    </a>
+                </span>
+            {% endif %}
+
+            <!-- PAGINACION -->
+            <div class="row d-flex">
+                <span class="mr-1">Paginas: </span>
+                {% if startPage > 1 %}
+                <span class="pagination_item">
+                    <a class="" href="{{ path(route, query|merge({(pageParameterName): 1})) }}">1</a>
+                </span>
+                {% if startPage == 3 %}
+                    <span class="">
+                        <a class="" href="{{ path(route, query|merge({(pageParameterName): 2})) }}">2</a>
+                    </span>
+                {% elseif startPage != 2 %}
+                    <span class=" disabled" style="color: rgba(0, 0, 0, 0.3)">
+                        <span class="">&hellip;</span>
+                    </span>
+                {% endif %}
+            {% endif %}
+
+            {% for page in pagesInRange %}
+                {% if page != current %}
+                    <span class="pagination_item">
+                        <a class="" href="{{ path(route, query|merge({(pageParameterName): page})) }}">
+                            {% if page != 1 and page != startPage %}
+                                ,
+                            {% endif %}
+                             {{ page }}
+                        </a>
+                    </span>
+                {% else %}
+                    <span class="pagination_selected active">
+                        <span class="">
+                            {% if page != 1 %}
+                            ,
+                            {% endif %}
+                            {{ page }}
+                        </span>
+                    </span>
+                {% endif %}
+
+            {% endfor %}
+
+            {% if pageCount > endPage %}
+                {% if pageCount > (endPage + 1) %}
+                    {% if pageCount > (endPage + 2) %}
+                        <span class=" disabled">
+                            <span class="" style="color: rgba(0, 0, 0, 0.3)">&hellip;</span>
+                        </span>
+                    {% else %}
+                        <span class="">
+                            <a class="" href="{{ path(route, query|merge({(pageParameterName): (pageCount - 1)})) }}">, {{ pageCount -1 }}, </a>
+                        </span>
+                    {% endif %}
+                {% endif %}
+                <span class="pagination_item">
+                    <a class="" href="{{ path(route, query|merge({(pageParameterName): pageCount})) }}">
+                        {% if pageCount-3 == current %}
+                        , 
+                        {% endif %}
+                        {{ pageCount }}
+                    </a>
+                </span>
+            {% endif %}
+            </div>
+            <!-- PAGINACION -->
+
+            {% if next is defined %}
+                <span class="">
+                    <a href="{{ path(route, query|merge({(pageParameterName): next})) }}" class="d-flex product_navigation align-items-center">
+                        <span>Siguiente</span>
+                        <div class="ml-2"><i class="fas fa-caret-right fa-lg"></i></div>
+                    </a>
+                </span>
+            {% else %}
+                <span style="opacity: 0.4">
+                    <a class="d-flex product_navigation align-items-center">
+                        <span>Siguiente</span>
+                        <div class="ml-2"><i class="fas fa-caret-right fa-lg"></i></div>
+                    </a>
+                </span>
+            {% endif %}
+        </div>
+    </nav>
+{% endif %}

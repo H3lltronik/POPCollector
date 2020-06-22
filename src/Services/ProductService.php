@@ -81,6 +81,7 @@ class ProductService {
         $query = $repo->addJoinTo($query, 'App\Entity\ProductType', "type", "product.productType");
         $query = $repo->addJoinTo($query, 'App\Entity\User', "publisher", "product.publisher");
         $query->andWhere("publisher.isActive = 1");
+        $query->andWhere("product.isVisible = 1");
         $query->andWhere("type.Name = :val")->setParameter("val", $category);
 
         return $query;
@@ -89,6 +90,7 @@ class ProductService {
     public function getAllProducts() {
         $repo = $this->em->getRepository(Product::class);
         $query = $repo->createQueryBuilder("product");
+        $query->andWhere("product.isVisible = 1");
 
         return $query;
     }
@@ -96,6 +98,7 @@ class ProductService {
     public function getRelatedProducts($category, $quantity, $excludeID) {
         $query = $this->getProductsByCategory ($category);
         $query->orderBy('product.id', 'ASC');
+        $query->andWhere("product.isVisible = 1");
         $products = $query->getQuery()->getResult();
         $productsRelated = [];
         $auxCont = 0;

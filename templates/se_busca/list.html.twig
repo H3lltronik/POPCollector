@@ -21,7 +21,7 @@
                 {% endif %}
         {% endfor %}
     </div>
-    {{ knp_pagination_render(pagination) }}
+    {{ knp_pagination_render(pagination, 'common/paginator.html.twig') }}
 {% endblock %}
 
 {% block javascripts %}
