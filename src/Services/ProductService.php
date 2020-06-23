@@ -26,6 +26,7 @@ class ProductService {
         $product = new Product();
         $product = $this->editBase($product, $values);
         $product->setIsVisible(true);
+        $product->setClicks(0);
 
         $this->em->persist($product);
         $this->em->flush();
