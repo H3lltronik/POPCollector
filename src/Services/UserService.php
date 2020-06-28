@@ -6,14 +6,17 @@ use DateTime;
 use DateTimeZone;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService {
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, Security $security) {
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, Security $security, MailerInterface $mailer) {
         $this->em = $em;
         $this->security = $security;
         $this->encoder = $encoder;
+        $this->mailer = $mailer;
         $this->accountRoles = [
             "buyer" => ["ROLE_BUYER"],
             "seller" => ["ROLE_SELLER"],
@@ -112,5 +115,23 @@ class UserService {
         } else {
             return false;
         }
+    }
+
+    public function notifyUser (User $user, $type) {
+        $templateName = null;
+        if ($type == "verificationsBlock") {
+            $templateName = "product\mail.html.twig";
+        } else if ($type == "blocked") {
+            $templateName = "common\blockedMail.html.twig";
+        }
+
+        $email = (new TemplatedEmail())
+        ->from('no-reply@popcollector.com')
+        ->to($user->getEmail())
+        ->subject('AVISO URGENTE')
+        ->htmlTemplate($templateName)
+        ->context([]);
+
+        $this->mailer->send($email);
     }
 }

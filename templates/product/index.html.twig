@@ -23,15 +23,20 @@
         <div class="col-12 col-lg-7">   
             <div class="product_page_title mt-5 mt-lg-0 d-flex align-items-center">{{product.title}}
                 {% if product.verified is not null %}
-                    {% if product.verified %}
+                    {% if product.verified == 'approved' %}
                         <div class="c-tooltip_container">
                             <el-icon class="el-icon-check product_verification-status_success"></el-icon>
                             <span class="c-tooltip">Aprobado</span>
                         </div>
+                    {% elseif product.verified == 'doubt' %}
+                        <div class="c-tooltip_container">
+                            <el-icon class="el-icon-close product_verification-status_warning"></el-icon>
+                            <span class="c-tooltip">Dudoso</span>
+                        </div>
                     {% else %}
                         <div class="c-tooltip_container">
                             <el-icon class="el-icon-close product_verification-status_failure"></el-icon>
-                            <span class="c-tooltip">No aprobado</span>
+                            <span class="c-tooltip">False</span>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -81,9 +86,18 @@
                 </div>
                 <div class="row">
                     <div class="w-100 text-center">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="approved">
-                            <label class="custom-control-label" for="approved">Aprovado</label>
+                        <div class="d-flex w-100 align-items-center justify-content-center">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success active">
+                                    <input type="radio" name="options" id="approved" autocomplete="off" checked>Aprovado
+                                </label>
+                                <label class="btn btn-warning">
+                                    <input type="radio" name="options" id="doubt" autocomplete="off">Dudoso
+                                </label>
+                                <label class="btn btn-danger">
+                                    <input type="radio" name="options" id="false" autocomplete="off"> Falso
+                                </label>
+                            </div>
                         </div>
                         <textarea id="ver-comments" name="comments" class="form-control" placeholder="Comentarios" rows="5"></textarea>
                         <button id="verificate" type="verificate" class="btn btn-primary mt-2">Enviar veredicto</button>
@@ -229,7 +243,8 @@
         })
 
         $("#verificate").click(e => {
-            let approved = ($("#approved").is(":checked"))? 1:0;
+            let approved = ($("#approved").is(":checked"))? 'approved':($("#doubt").is(":checked"))? 'doubt':($("#false").is(":checked"))? 'false':null;
+
             let verComments = $("#ver-comments").val();
             let id = "{{product.verifications.id|default(0)}}"
             $.post("{{path("product_verificate")}}", {approved, verComments, id}).then((res) => {

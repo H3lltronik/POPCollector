@@ -58,7 +58,7 @@ class Product
     private $genero = [];
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $verified;
 
@@ -234,18 +234,6 @@ class Product
     public function setGenero(array $genero): self
     {
         $this->genero = $genero;
-
-        return $this;
-    }
-
-    public function getVerified(): ?bool
-    {
-        return $this->verified;
-    }
-
-    public function setVerified(bool $verified): self
-    {
-        $this->verified = $verified;
 
         return $this;
     }
@@ -495,6 +483,18 @@ class Product
         if ($verifications->getProduct() !== $newProduct) {
             $verifications->setProduct($newProduct);
         }
+
+        return $this;
+    }
+
+    public function getVerified(): ?string
+    {
+        return $this->verified;
+    }
+
+    public function setVerified(?string $verified): self
+    {
+        $this->verified = $verified;
 
         return $this;
     }
