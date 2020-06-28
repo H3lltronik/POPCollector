@@ -88,6 +88,11 @@ class User implements UserInterface
      */
     private $purchasesTicket;
 
+    /**
+     * @ORM\Column(type="integer", options={"default" : 0})
+     */
+    private $strikes = 0;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -451,6 +456,18 @@ class User implements UserInterface
                 $purchasesTicket->setBuyer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStrikes(): ?int
+    {
+        return $this->strikes;
+    }
+
+    public function setStrikes(int $strikes): self
+    {
+        $this->strikes = $strikes;
 
         return $this;
     }

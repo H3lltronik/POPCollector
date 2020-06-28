@@ -91,7 +91,9 @@ class ProductService {
     public function getAllProducts() {
         $repo = $this->em->getRepository(Product::class);
         $query = $repo->createQueryBuilder("product");
+        $query = $repo->addJoinTo($query, 'App\Entity\User', "publisher", "product.publisher");
         $query->andWhere("product.isVisible = 1");
+        $query->andWhere("publisher.isActive = 1");
 
         return $query;
     }
