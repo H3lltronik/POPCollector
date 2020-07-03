@@ -23,6 +23,7 @@ class StatisticsController extends AbstractController
         $vQuery->innerJoin("App\Entity\Sale", "sale", Join::WITH, "product.id = sale.product");
         $vQuery->addSelect("COUNT(sale) as amout");
         $vQuery->addSelect("SUM(sale.price) as total");
+        $vQuery->addSelect("SUM(sale.quantity) as quantity");
         $vQuery->groupBy("sale.product");
         $vQuery->orderBy("amout", "ASC");
         $vQuery->andWhere("user.id = :userID");

@@ -7,18 +7,23 @@
         <div class="product_small_title mt-lg-2 d-flex align-items-center">
             <span>{{product.title}}</span>
             {% if product.verified is not null %}
-                {% if product.verified %}
-                    <div class="c-tooltip_container">
-                        <el-icon class="el-icon-check product_verification-status_success"></el-icon>
-                        <span class="c-tooltip">Aprobado</span>
-                    </div>
-                {% else %}
-                    <div class="c-tooltip_container">
-                        <el-icon class="el-icon-close product_verification-status_failure"></el-icon>
-                        <span class="c-tooltip">No aprobado</span>
-                    </div>
+                    {% if product.verified == 'approved' %}
+                        <div class="c-tooltip_container">
+                            <el-icon class="el-icon-check product_verification-status_success"></el-icon>
+                            <span class="c-tooltip">Aprobado</span>
+                        </div>
+                    {% elseif product.verified == 'doubt' %}
+                        <div class="c-tooltip_container">
+                            <el-icon class="el-icon-close product_verification-status_warning"></el-icon>
+                            <span class="c-tooltip">Dudoso</span>
+                        </div>
+                    {% else %}
+                        <div class="c-tooltip_container">
+                            <el-icon class="el-icon-close product_verification-status_failure"></el-icon>
+                            <span class="c-tooltip">False</span>
+                        </div>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
         </div>
         <div class="product_small_price">${{product.price}}</div>
     </div>

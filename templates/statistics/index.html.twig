@@ -29,7 +29,7 @@
     <script>
         var data = [
                 {% for product in ventas %}
-                    { y: "{{product[0].title}}", a: {{product.amout}}},
+                    { y: "{{product[0].title}}", a: {{product.quantity}}},
                 {% endfor %}
             ],
             config = {
